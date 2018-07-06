@@ -14,10 +14,8 @@ from drqa.utils import str2bool
 import logging
 
 
-def prepare_test(vocab, vocab_tag, vocab_ent):
-    args, log = setup()
+def prepare_test(vocab, vocab_tag, vocab_ent, args):
     test = flatten_json(args.test_file, 'test')
-    log.info('json data flattened.')
     with Pool(args.threads, initializer=init) as p:
         annotate_ = partial(annotate, wv_cased=args.wv_cased)
         test = list(tqdm(p.imap(annotate_, test, chunksize=args.batch_size), total=len(test), desc='test'))
@@ -27,18 +25,18 @@ def prepare_test(vocab, vocab_tag, vocab_ent):
         for line in f:
             token = normalize_text(line.rstrip().split(' ')[0])
             wv_vocab.add(token)
-    log.info('glove vocab loaded.')
+    print('glove vocab loaded.')
 
     w2id = {w: i for i, w in enumerate(vocab)}
     tag2id = {w: i for i, w in enumerate(vocab_tag)}
     ent2id = {w: i for i, w in enumerate(vocab_ent)}
-    log.info('Vocabulary size: {}'.format(len(vocab)))
-    log.info('Found {} POS tags.'.format(len(vocab_tag)))
-    log.info('Found {} entity tags: {}'.format(len(vocab_ent), vocab_ent))
+    print('Vocabulary size: {}'.format(len(vocab)))
+    print('Found {} POS tags.'.format(len(vocab_tag)))
+    print('Found {} entity tags: {}'.format(len(vocab_ent), vocab_ent))
 
     to_id_ = partial(to_id, w2id=w2id, tag2id=tag2id, ent2id=ent2id)
     test = list(map(to_id_, test))
-    log.info('converted to ids.')
+    print('converted to ids.')
     test_x = [x[:-1] for x in test]
     test_y = [x[-1] for x in test]
 

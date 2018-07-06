@@ -7,6 +7,7 @@ from drqa.utils import str2bool
 from prepro import annotate, to_id, init, prepare_test
 from train import BatchGen, score
 
+import multiprocessing
 """
 This script serves as a template to be modified to suit all possible testing environments, including and not limited 
 to files (json, xml, csv, ...), web service, databases and so on.
@@ -22,6 +23,25 @@ parser.add_argument('--model-file', default='models/best_model.pt',
 parser.add_argument("--cuda", type=str2bool, nargs='?',
                     const=True, default=torch.cuda.is_available(),
                     help='whether to use GPU acceleration.')
+
+parser.add_argument('--test_file', default='ClinicalTrials/Sprint1_minmax_age_QA.json',
+                    help='path to dev file.')
+parser.add_argument('--wv_file', default='glove/glove.840B.300d.txt',
+                    help='path to word vector file.')
+parser.add_argument('--wv_dim', type=int, default=300,
+                    help='word vector dimension.')
+parser.add_argument('--wv_cased', type=str2bool, nargs='?',
+                    const=True, default=True,
+                    help='treat the words as cased or not.')
+parser.add_argument('--sort_all', action='store_true',
+                    help='sort the vocabulary by frequencies of all words. '
+                         'Otherwise consider question words first.')
+parser.add_argument('--sample_size', type=int, default=0,
+                    help='size of sample data (for debugging).')
+parser.add_argument('--threads', type=int, default=min(multiprocessing.cpu_count(), 16),
+                    help='number of threads for preprocessing.')
+parser.add_argument('--batch_size', type=int, default=64,
+                    help='batch size for multiprocess tokenizing and tagging.')
 args = parser.parse_args()
 
 
