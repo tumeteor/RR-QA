@@ -23,6 +23,9 @@ parser.add_argument('--model-file', default='models/best_model.pt',
 parser.add_argument("--cuda", type=str2bool, nargs='?',
                     const=True, default=torch.cuda.is_available(),
                     help='whether to use GPU acceleration.')
+parser.add_argument("--batch", type=str2bool, nargs='?',
+                    const=True, default=True,
+                    help='whether to use batch evaluation.')
 
 parser.add_argument('--test_file', default='ClinicalTrials/Sprint1_minmax_age_QA.json',
                     help='path to dev file.')
@@ -64,42 +67,45 @@ opt['cuda'] = args.cuda
 BatchGen.pos_size = opt['pos_size']
 BatchGen.ner_size = opt['ner_size']
 model = DocReaderModel(opt, embedding, state_dict)
-# w2id = {w: i for i, w in enumerate(meta['vocab'])}
-# tag2id = {w: i for i, w in enumerate(meta['vocab_tag'])}
-# ent2id = {w: i for i, w in enumerate(meta['vocab_ent'])}
-# init()
 
-test, test_y = prepare_test(meta['vocab'], meta['vocab_tag'], meta['vocab_ent'])
+if (args.batch):
+    test, test_y = prepare_test(meta['vocab'], meta['vocab_tag'], meta['vocab_ent'], meta['wv_cased'], args)
 
-batches = BatchGen(test, batch_size=args.batch_size, evaluation=True, gpu=args.cuda)
-predictions = []
-for i, batch in enumerate(batches):
-    predictions.extend(model.predict(batch))
-    print('> evaluating [{}/{}]'.format(i, len(batches)))
-    em, f1 = score(predictions, test_y)
-    print("dev EM: {} F1: {}".format(em, f1))
+    batches = BatchGen(test, batch_size=args.batch_size, evaluation=True, gpu=args.cuda)
+    predictions = []
+    for i, batch in enumerate(batches):
+        predictions.extend(model.predict(batch))
+        print('> evaluating [{}/{}]'.format(i, len(batches)))
+        em, f1 = score(predictions, test_y)
+        print("dev EM: {} F1: {}".format(em, f1))
+else:
+    w2id = {w: i for i, w in enumerate(meta['vocab'])}
+    tag2id = {w: i for i, w in enumerate(meta['vocab_tag'])}
+    ent2id = {w: i for i, w in enumerate(meta['vocab_ent'])}
+    init()
 
-# while True:
-#     id_ = 0
-#     try:
-#         while True:
-#             evidence = input('Evidence: ')
-#             if evidence.strip():
-#                 break
-#         while True:
-#             question = input('Question: ')
-#             if question.strip():
-#                 break
-#     except EOFError:
-#         print()
-#         break
-#     id_ += 1
-#     start_time = time.time()
-#     annotated = annotate(('interact-{}'.format(id_), evidence, question), meta['wv_cased'])
-#     model_in = to_id(annotated, w2id, tag2id, ent2id)
-#     model_in = next(iter(BatchGen([model_in], batch_size=1, gpu=args.cuda, evaluation=True)))
-#     prediction = model.predict(model_in)[0]
-#     end_time = time.time()
-#     print('Answer: {}'.format(prediction))
-#     print('Time: {:.4f}s'.format(end_time - start_time))
+    while True:
+        id_ = 0
+        try:
+            while True:
+                evidence = input('Evidence: ')
+                if evidence.strip():
+                    break
+            while True:
+                question = input('Question: ')
+                if question.strip():
+                    break
+        except EOFError:
+            print()
+            break
+        id_ += 1
+        start_time = time.time()
+        annotated = annotate(('interact-{}'.format(id_), evidence, question), meta['wv_cased'])
+        model_in = to_id(annotated, w2id, tag2id, ent2id)
+        model_in = next(iter(BatchGen([model_in], batch_size=1, gpu=args.cuda, evaluation=True)))
+        prediction = model.predict(model_in)[0]
+        end_time = time.time()
+        print('Answer: {}'.format(prediction))
+        print('Time: {:.4f}s'.format(end_time - start_time))
+
 

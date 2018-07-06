@@ -14,10 +14,10 @@ from drqa.utils import str2bool
 import logging
 
 
-def prepare_test(vocab, vocab_tag, vocab_ent, args):
+def prepare_test(vocab, vocab_tag, vocab_ent, wv_cased, args):
     test = flatten_json(args.test_file, 'test')
     with Pool(args.threads, initializer=init) as p:
-        annotate_ = partial(annotate, wv_cased=args.wv_cased)
+        annotate_ = partial(annotate, wv_cased=wv_cased)
         test = list(tqdm(p.imap(annotate_, test, chunksize=args.batch_size), total=len(test), desc='test'))
     # load vocabulary from word vector files
     wv_vocab = set()
