@@ -145,6 +145,8 @@ def setup():
                         help='path to train file.')
     parser.add_argument('--dev_file', default='SQuAD/dev-v1.1.json',
                         help='path to dev file.')
+    parser.add_argument('--test_file', default='ClinicalTrials/Sprint1_minmax_age_QA.json',
+                        help='path to dev file.')
     parser.add_argument('--wv_file', default='glove/glove.840B.300d.txt',
                         help='path to word vector file.')
     parser.add_argument('--wv_dim', type=int, default=300,
