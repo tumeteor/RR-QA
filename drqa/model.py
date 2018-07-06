@@ -124,7 +124,7 @@ class DocReaderModel(object):
             scores = scores.numpy()
             s_idx, e_idx = np.unravel_index(np.argmax(scores), scores.shape)
             s_offset, e_offset = spans[i][s_idx][0], spans[i][e_idx][1]
-            predictions.append(text[i][s_offset:e_offset])
+            predictions.append([text[i][s_offset:e_offset], max(scores)])
 
         return predictions
 
