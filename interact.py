@@ -105,8 +105,7 @@ else:
         model_in = next(iter(BatchGen([model_in], batch_size=1, gpu=args.cuda, evaluation=True)))
         prediction = model.predict(model_in)[0]
         end_time = time.time()
-        print('Answer: {}'.format(prediction[0]))
-        print('Score: {}'.format(prediction[1]))
+        print('Answer: {}'.format(prediction))
         print('Time: {:.4f}s'.format(end_time - start_time))
 
 
