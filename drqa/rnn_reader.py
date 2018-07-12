@@ -68,6 +68,7 @@ class RnnDocReader(nn.Module):
             padding=opt['rnn_padding'],
         )
 
+
         # RNN question encoder
         self.question_rnn = layers.StackedBRNN(
             input_size=opt['embedding_dim'],
@@ -136,6 +137,7 @@ class RnnDocReader(nn.Module):
         drnn_input = torch.cat(drnn_input_list, 2)
         # Encode document with RNN
         doc_hiddens = self.doc_rnn(drnn_input, x1_mask)
+
 
         # Encode question with RNN + merge hiddens
         question_hiddens = self.question_rnn(x2_emb, x2_mask)
