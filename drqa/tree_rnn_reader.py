@@ -6,16 +6,41 @@
 import torch
 import torch.nn as nn
 from . import layers
+from TreeQA.FullTree import BinaryTreeLSTM, BinaryTreeTopDownLSTM
 
 # Modification:
 #   - add 'pos' and 'ner' features.
 #   - use gradient hook (instead of tensor copying) for gradient masking
 # Origin: https://github.com/facebookresearch/ParlAI/tree/master/parlai/agents/drqa
+class QuestionEncoding(nn.Module):
+
+    def __init__(self, in_dim, mem_dim):
+        self.bp_lstm = BinaryTreeLSTM(in_dim, mem_dim)
+        self.td_lstm = BinaryTreeTopDownLSTM(in_dim, mem_dim, self.bp_lstm)
+
+    def forward(self, tree, embs):
+        bp_states, bp_hidden = self.bp_lstm(tree, embs)
+        td_states, td_hidden = self.td_lstm(tree, embs)
+        return torch.cat([bp_hidden, td_hidden])
+
+
+class ContextEncoding(nn.Module):
+
+    def __init__(self, in_dim, mem_dim):
+        self.bp_lstm = BinaryTreeLSTM(in_dim, mem_dim)
+        self.td_lstm = BinaryTreeTopDownLSTM(in_dim, mem_dim, self.bp_lstm)
+
+    def forward(self, tree, embs):
+        bp_states, bp_hidden = self.bp_lstm(tree, embs)
+        td_states, td_hidden = self.td_lstm(tree, embs)
+        return torch.cat([bp_hidden, td_hidden])
+
+
+
 
 
 class RnnDocReader(nn.Module):
     """Network for the Document Reader module of DrQA."""
-    RNN_TYPES = {'lstm': nn.LSTM, 'gru': nn.GRU, 'rnn': nn.RNN}
 
     def __init__(self, opt, padding_idx=0, embedding=None):
         super(RnnDocReader, self).__init__()
@@ -57,29 +82,11 @@ class RnnDocReader(nn.Module):
             doc_input_size += opt['ner_size']
 
         # RNN document encoder
-        self.doc_rnn = layers.StackedBRNN(
-            input_size=doc_input_size,
-            hidden_size=opt['hidden_size'],
-            num_layers=opt['doc_layers'],
-            dropout_rate=opt['dropout_rnn'],
-            dropout_output=opt['dropout_rnn_output'],
-            concat_layers=opt['concat_rnn_layers'],
-            rnn_type=self.RNN_TYPES[opt['rnn_type']],
-            padding=opt['rnn_padding'],
-        )
+        self.doc_rnn = ContextEncoding(in_dim=doc_input_size, mem_dim=opt['hidden_size'])
 
 
         # RNN question encoder
-        self.question_rnn = layers.StackedBRNN(
-            input_size=opt['embedding_dim'],
-            hidden_size=opt['hidden_size'],
-            num_layers=opt['question_layers'],
-            dropout_rate=opt['dropout_rnn'],
-            dropout_output=opt['dropout_rnn_output'],
-            concat_layers=opt['concat_rnn_layers'],
-            rnn_type=self.RNN_TYPES[opt['rnn_type']],
-            padding=opt['rnn_padding'],
-        )
+        self.question_rnn = QuestionEncoding(in_dim=doc_input_size, mem_dim=opt['hidden_size'])
 
         # Output sizes of rnn encoders
         doc_hidden_size = 2 * opt['hidden_size']
@@ -99,6 +106,7 @@ class RnnDocReader(nn.Module):
             doc_hidden_size,
             question_hidden_size,
         )
+
         self.end_attn = layers.BilinearSeqAttn(
             doc_hidden_size,
             question_hidden_size,
@@ -137,7 +145,6 @@ class RnnDocReader(nn.Module):
         drnn_input = torch.cat(drnn_input_list, 2)
         # Encode document with RNN
         doc_hiddens = self.doc_rnn(drnn_input, x1_mask)
-
 
         # Encode question with RNN + merge hiddens
         question_hiddens = self.question_rnn(x2_emb, x2_mask)
