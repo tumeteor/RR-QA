@@ -70,6 +70,7 @@ def main():
         # eval
         batches = BatchGen(dev, batch_size=args.batch_size, evaluation=True, gpu=args.cuda)
         predictions = []
+      
         for i, batch in enumerate(batches):
             predictions.extend(model.predict(batch))
             log.debug('> evaluating [{}/{}]'.format(i, len(batches)))
@@ -94,9 +95,9 @@ def setup():
     # system
     parser.add_argument('--log_per_updates', type=int, default=3,
                         help='log model loss per x updates (mini-batches).')
-    parser.add_argument('--data_file', default='SQuAD/data.msgpack',
+    parser.add_argument('--data_file', default='HBCP/effect/data.msgpack',
                         help='path to preprocessed data file.')
-    parser.add_argument('--model_dir', default='models',
+    parser.add_argument('--model_dir', default='models/HBCP/effect',
                         help='path to store saved models.')
     parser.add_argument('--save_last_only', action='store_true',
                         help='only save the final models.')
@@ -106,8 +107,8 @@ def setup():
                         const=True, default=torch.cuda.is_available(),
                         help='whether to use GPU acceleration.')
     # training
-    parser.add_argument('-e', '--epochs', type=int, default=40)
-    parser.add_argument('-bs', '--batch_size', type=int, default=32)
+    parser.add_argument('-e', '--epochs', type=int, default=100)
+    parser.add_argument('-bs', '--batch_size', type=int, default=10)
     parser.add_argument('-rs', '--resume', default='best_model.pt',
                         help='previous model file name (in `model_dir`). '
                              'e.g. "checkpoint_epoch_11.pt"')
@@ -202,7 +203,7 @@ def lr_decay(optimizer, lr_decay):
 
 
 def load_data(opt):
-    with open('SQuAD/meta.msgpack', 'rb') as f:
+    with open('HBCP/effect/meta.msgpack', 'rb') as f:
         meta = msgpack.load(f, encoding='utf8')
     embedding = torch.Tensor(meta['embedding'])
     opt['pretrained_words'] = True
@@ -236,7 +237,7 @@ class BatchGen:
         self.gpu = gpu
 
         # sort by len
-        data = sorted(data, key=lambda x: len(x[1]))
+        # data = sorted(data, key=lambda x: len(x[1]))
         # chunk into batches
         data = [data[i:i + batch_size] for i in range(0, len(data), batch_size)]
 
@@ -343,9 +344,10 @@ def _f1_score(pred, answers):
             return 0
         precision = 1. * num_same / len(g_tokens)
         recall = 1. * num_same / len(a_tokens)
+        #print("precision: {}".format(precision))
+        #print("recall: {}".format(recall))
         f1 = (2 * precision * recall) / (precision + recall)
         return f1
-
     if pred is None or answers is None:
         return 0
     g_tokens = _normalize_answer(pred).split()
@@ -353,16 +355,22 @@ def _f1_score(pred, answers):
     return max(scores)
 
 
-def score(pred, truth):
+def score(pred, truth, evaluation=False):
     assert len(pred) == len(truth)
     f1 = em = total = 0
     for p, t in zip(pred, truth):
+        print(p + " " + t[0])
         total += 1
         em += _exact_match(p, t)
         f1 += _f1_score(p, t)
-    em = 100. * em / total
+    pre = 100. * em / total
     f1 = 100. * f1 / total
-    return em, f1
+    if evaluation:
+      print("precision: {}".format(pre))
+      recall = 100. * em / 87
+      print("recall: {}".format(recall))
+      print("f1: {}".format((2 * pre * recall) / (pre + recall)))
+    return pre, f1
 
 
 if __name__ == '__main__':

@@ -114,7 +114,7 @@ def main():
         'embedding': embeddings.tolist(),
         'wv_cased': args.wv_cased,
     }
-    with open('SQuAD/meta.msgpack', 'wb') as f:
+    with open('HBCP/effect/meta.msgpack', 'wb') as f:
         msgpack.dump(meta, f)
     result = {
         'train': train,
@@ -124,14 +124,14 @@ def main():
     #        question_id, context, context_token_span, answer_start, answer_end
     # dev:   id, context_id, context_features, tag_id, ent_id,
     #        question_id, context, context_token_span, answer
-    with open('SQuAD/data.msgpack', 'wb') as f:
+    with open('HBCP/effect/data.msgpack', 'wb') as f:
         msgpack.dump(result, f)
     if args.sample_size:
         sample = {
             'train': train[:args.sample_size],
             'dev': dev[:args.sample_size]
         }
-        with open('SQuAD/sample.msgpack', 'wb') as f:
+        with open('HBCP/effect/sample.msgpack', 'wb') as f:
             msgpack.dump(sample, f)
     log.info('saved to disk.')
 
@@ -139,11 +139,11 @@ def setup():
     parser = argparse.ArgumentParser(
         description='Preprocessing data files, about 10 minitues to run.'
     )
-    parser.add_argument('--trn_file', default='SQuAD/train-v1.1.json',
+    parser.add_argument('--trn_file', default='HBCP/effect/train.effect.json',
                         help='path to train file.')
-    parser.add_argument('--dev_file', default='SQuAD/dev-v1.1.json',
+    parser.add_argument('--dev_file', default='HBCP/effect/dev.effect.json',
                         help='path to dev file.')
-    parser.add_argument('--test_file', default='ClinicalTrials/Sprint1_minmax_age_QA.json',
+    parser.add_argument('--test_file', default='HBCP/effect/dev.effect.json',
                         help='path to dev file.')
     parser.add_argument('--wv_file', default='glove/glove.840B.300d.txt',
                         help='path to word vector file.')
@@ -179,6 +179,7 @@ def flatten_json(data_file, mode):
     for article in data:
         for paragraph in article['paragraphs']:
             context = paragraph['context']
+            print(context)
             for qa in paragraph['qas']:
                 id_, question, answers = qa['id'], qa['question'], qa['answers']
                 if mode == 'train':
@@ -280,8 +281,8 @@ def to_id(row, w2id, tag2id, ent2id, unk_id=1):
     question_tokens = row[5]
     question_ids = [w2id[w] if w in w2id else unk_id for w in question_tokens]
     context_ids = [w2id[w] if w in w2id else unk_id for w in context_tokens]
-    tag_ids = [tag2id[w] for w in context_tags]
-    ent_ids = [ent2id[w] for w in context_ents]
+    tag_ids = [tag2id[w] if w in tag2id else 0 for w in context_tags]
+    ent_ids = [ent2id[w] if w in ent2id else 0 for w in context_ents]
     return (row[0], context_ids, context_features, tag_ids, ent_ids, question_ids) + row[6:]
 
 

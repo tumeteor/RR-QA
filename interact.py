@@ -18,7 +18,7 @@ To change this script to batch model, simply modify line 70 from "BatchGen([mode
 parser = argparse.ArgumentParser(
     description='Interact with document reader model.'
 )
-parser.add_argument('--model-file', default='models/best_model.pt',
+parser.add_argument('--model-file', default='models/HBCP/effect/best_model.pt',
                     help='path to model file')
 parser.add_argument("--cuda", type=str2bool, nargs='?',
                     const=True, default=torch.cuda.is_available(),
@@ -27,7 +27,7 @@ parser.add_argument("--batch", type=str2bool, nargs='?',
                     const=True, default=True,
                     help='whether to use batch evaluation.')
 
-parser.add_argument('--test_file', default='ClinicalTrials/Sprint1_minmax_age_QA.json',
+parser.add_argument('--test_file', default='HBCP/effect/dev.effect.json',
                     help='path to dev file.')
 parser.add_argument('--wv_file', default='glove/glove.840B.300d.txt',
                     help='path to word vector file.')
@@ -43,7 +43,7 @@ parser.add_argument('--sample_size', type=int, default=0,
                     help='size of sample data (for debugging).')
 parser.add_argument('--threads', type=int, default=min(multiprocessing.cpu_count(), 16),
                     help='number of threads for preprocessing.')
-parser.add_argument('--batch_size', type=int, default=64,
+parser.add_argument('--batch_size', type=int, default=1,
                     help='batch size for multiprocess tokenizing and tagging.')
 args = parser.parse_args()
 
@@ -55,7 +55,7 @@ else:
 
 state_dict = checkpoint['state_dict']
 opt = checkpoint['config']
-with open('SQuAD/meta.msgpack', 'rb') as f:
+with open('HBCP/effect/meta.msgpack', 'rb') as f:
     meta = msgpack.load(f, encoding='utf8')
 embedding = torch.Tensor(meta['embedding'])
 opt['pretrained_words'] = True
@@ -73,11 +73,14 @@ if (args.batch):
 
     batches = BatchGen(test, batch_size=args.batch_size, evaluation=True, gpu=args.cuda)
     predictions = []
+    
     for i, batch in enumerate(batches):
-        predictions.extend(model.predict(batch))
-        print('> evaluating [{}/{}]'.format(i, len(batches)))
-        em, f1 = score(predictions, test_y)
-        print("dev EM: {} F1: {}".format(em, f1))
+        p = model.predict(batch)
+        print(p)
+        predictions.extend(p)
+        #print('> evaluating [{}/{}]'.format(i, len(batches)))
+    em, f1 = score(predictions, test_y, evaluation=True)
+    print("dev EM: {} F1: {}".format(em, f1))
 else:
     w2id = {w: i for i, w in enumerate(meta['vocab'])}
     tag2id = {w: i for i, w in enumerate(meta['vocab_tag'])}
