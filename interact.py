@@ -73,11 +73,12 @@ if (args.batch):
 
     batches = BatchGen(test, batch_size=args.batch_size, evaluation=True, gpu=args.cuda)
     predictions = []
+    scores = []
     
     for i, batch in enumerate(batches):
-        p = model.predict(batch)
-        print(p)
+        p, score = model.predict(batch)
         predictions.extend(p)
+        scores.extend(score)
         #print('> evaluating [{}/{}]'.format(i, len(batches)))
     em, f1 = score(predictions, test_y, evaluation=True)
     print("dev EM: {} F1: {}".format(em, f1))
@@ -106,9 +107,9 @@ else:
         annotated = annotate(('interact-{}'.format(id_), evidence, question), meta['wv_cased'])
         model_in = to_id(annotated, w2id, tag2id, ent2id)
         model_in = next(iter(BatchGen([model_in], batch_size=1, gpu=args.cuda, evaluation=True)))
-        prediction = model.predict(model_in)[0]
+        prediction, score = model.predict(model_in)[0]
         end_time = time.time()
-        print('Answer: {}'.format(prediction))
+        print('Answer: {}, score: {}'.format(prediction, score))
         print('Time: {:.4f}s'.format(end_time - start_time))
 
 

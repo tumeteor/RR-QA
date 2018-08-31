@@ -73,8 +73,8 @@ class DocReaderModel(object):
 
         # Transfer to GPU
         inputs = [e.to(self.device) for e in ex[:7]]
-        target_s = ex[7].to(self.device)
-        target_e = ex[8].to(self.device)
+        target_s = ex[7].to(self.device) #text
+        target_e = ex[8].to(self.device) #span
 
         # Run forward
         score_s, score_e = self.network(*inputs)
@@ -101,6 +101,48 @@ class DocReaderModel(object):
 
         # Transfer to GPU
         if self.opt['cuda']:
+            # ex (input): context_id, context_feature, context_tag, context_ent, context_mask,
+            #           question_id, question_mask, text, span
+            inputs = [Variable(e.cuda(async=True)) for e in ex[:7]]
+        else:
+            inputs = [Variable(e) for e in ex[:7]]
+
+        # Run forward
+        with torch.no_grad():
+            score_s, score_e = self.network(*inputs)
+
+        # Transfer to CPU/normal tensors for numpy ops
+        score_s = score_s.data.cpu()
+        score_e = score_e.data.cpu()
+
+        # Get argmax text spans
+        text = ex[-2]
+        spans = ex[-1]
+        predictions = []
+        pscores = []
+        max_len = self.opt['max_len'] or score_s.size(1)
+        for i in range(score_s.size(0)):
+            # i: each instance in a batch
+            # P_start(i) * P_end(i)
+            scores = torch.ger(score_s[i], score_e[i])
+            scores.triu_().tril_(max_len - 1)
+            scores = scores.numpy()
+            # get the coordinates
+            s_idx, e_idx = np.unravel_index(np.argmax(scores), scores.shape)
+            s_offset, e_offset = spans[i][s_idx][0], spans[i][e_idx][1]
+            predictions.append(text[i][s_offset:e_offset])
+            pscores.append(np.max(scores))
+
+        return predictions, pscores
+
+    def predict_cand(self, ex):
+        # Eval mode
+        self.network.eval()
+
+        # Transfer to GPU
+        if self.opt['cuda']:
+            # ex (input): context_id, context_feature, context_tag, context_ent, context_mask,
+            #           question_id, question_mask, text, span
             inputs = [Variable(e.cuda(async=True)) for e in ex[:7]]
         else:
             inputs = [Variable(e) for e in ex[:7]]
@@ -118,15 +160,8 @@ class DocReaderModel(object):
         spans = ex[-1]
         predictions = []
         max_len = self.opt['max_len'] or score_s.size(1)
-        for i in range(score_s.size(0)):
-            scores = torch.ger(score_s[i], score_e[i])
-            scores.triu_().tril_(max_len - 1)
-            scores = scores.numpy()
-            s_idx, e_idx = np.unravel_index(np.argmax(scores), scores.shape)
-            s_offset, e_offset = spans[i][s_idx][0], spans[i][e_idx][1]
-            predictions.append(text[i][s_offset:e_offset])
 
-        return predictions
+
 
     def save(self, filename, epoch, scores):
         em, f1, best_eval = scores

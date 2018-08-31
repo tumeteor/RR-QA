@@ -1,16 +1,18 @@
+# Attention!!!!! prepro_each only return the first paragraph of the first article for debugging, you can modify the `prepro_each` function according to corresponding comment.
+
 from tqdm import tqdm
 import json
 import os
 import nltk
 import argparse
-from collections import Counter
+from collections import Counter, deque
 import re
 import glob
-from treenode import tNode, processTree
+from tf_treenode import tNode, processTree
 import random
 import numpy as np
 import logging
-from collections import deque
+
 
 def load_embedding():
     word2idx = {}
@@ -20,10 +22,17 @@ def load_embedding():
         for line in tqdm(infile.readlines()):
             array = line.lstrip().rstrip().split(' ')
             vector = list(map(float, array[1:]))
-            embeddings.append(vector)
             word = array[0]
-            word2idx[word] = len(embeddings) - 1
-            # word=array[0]
+
+            if word not in word2idx:
+                if (len(vector) != 300):
+                    print(word)
+                else:
+                    embeddings.append(vector)
+                    word2idx[word] = len(embeddings) - 1
+                    # word=array[0]
+    # embeddings = np.asarray(embeddings, dtype=np.float32)
+    # print("embedding shape: {}".format(embeddings.shape))
     return word2idx, embeddings
 
 
@@ -36,9 +45,9 @@ def load_squad_data():
         for qindex, data in enumerate(tqdm(train_data)):
             question, answers, context = data[0], data[1], data[2]
             train_qlist.append(question)
-            qout.write(str(qindex) + '：' + question + '\n')
+            qout.write(str(qindex) + ': ' + question + '\n')
             aout.write('\n'.join([str(qindex) + '：' + answer + '\n' for answer in answers]))
-            cout.write(str(qindex) + '：' + context + '\n')
+            cout.write(str(qindex) + ': ' + context + '\n')
     sum_counter = trainCounter + devCounter
     word2idx, embedding = load_embedding()
     with open('vocab.txt', 'w+') as outfile:
@@ -47,14 +56,14 @@ def load_squad_data():
     train_trees = []
     train_answer = []
     train_context_trees = []
-    for i in range(len(train_data)):
+    for i in tqdm(range(len(train_data))):
         train_trees.append(get_tree(train_data[i][0]))
 
-        train_answer = get_word_idx(
-            word_tokenize(train_data[i][1][0]))  # consider that only one correct answer in train dataset
+        train_answer = get_word_idx(word_tokenize(train_data[i][1][0]),
+                                    word2idx)  # consider that only one correct answer in train dataset
 
         cur_context_trees = []
-        contexts = nltk.sent_tokenize(train_data[i][2])
+        contexts = nltk.sent_tokenize(train_data[i][2]) # tokenize by sentences
         for j in range(len(contexts)):
             cur_context_trees.append(get_tree(contexts[j]))
         train_context_trees.append(cur_context_trees)
@@ -67,6 +76,8 @@ def load_squad_data():
     # train_data[#][1] is the wordidx list of target answer
     # train_data[#][2] is the root list of the sentence
     data = {'train': train_data, 'dev': dev_data}
+    # print(len(word2idx))
+    # print(len(embedding))
     return data, word2idx, embedding
 
 
@@ -79,15 +90,15 @@ def get_word_idx(word_list, word2idx):
             idx_list.append(word2idx[word.lower()])
         else:
             logging.warn('no wordidx for answer:{}'.format(word))
-            idx_list.append(word2idx['unknown'])
+            idx_list.append(word2idx['UNK'])
     return idx_list
 
 
 def get_args():
     parser = argparse.ArgumentParser()
-    source_dir = '/home2/shr/data/nlp/squad'
+    source_dir = '/home/tunguyen/CQA/SQuAD/raw'
     target_dir = 'data/squad'
-    glove_path = '/home/shr/data/glove/glove.6B.300d.txt'
+    glove_path = '/home/tunguyen/CQA/glove/glove.840B.300d.txt'
     parser.add_argument('-s', '--source_dir', default=source_dir)
     parser.add_argument('-t', '--target_dir', default=target_dir)
     parser.add_argument('-gs', '--glove_path', default=glove_path)
@@ -160,7 +171,8 @@ class Args():
 
 
 def constituency_parse(sentence, cp='', tokenize=True):
-    args = Args()
+    classpath = "/home/tunguyen/Constituent-LSTM/lib:/home/tunguyen/Constituent-LSTM/lib/stanford-parser/stanford-parser.jar:/home/tunguyen/Constituent-LSTM/lib/stanford-parser/stanford-parser-3.5.1-models.jar"
+    # args=Args()
     with open('tmp.txt', 'w+') as outfile:
         outfile.write(sentence)
     tokpath = 'tmp.tok'
@@ -168,8 +180,9 @@ def constituency_parse(sentence, cp='', tokenize=True):
     relpath = 'tmp.rel'
     # cmd=('java -cp {} DependencyParse -tokpath {} -parentpath {} -relpath {} -tokenize -  < {}'.format(args.classpath,tokpath,parentpath, relpath,'tmp.txt'))
     # os.system(cmd)
-    cmd = ('java -cp {} ConstituencyParse -tokpath {} -parentpath {} -tokenize -  < {}'.format(args.classpath, tokpath,
-                                                                                               parentpath, 'tmp.txt'))
+    cmd = (
+    'java -cp {} ConstituencyParse -tokpath {} -parentpath {} -tokenize -  < {}'.format(classpath, tokpath, parentpath,
+                                                                                        'tmp.txt'))
     os.system(cmd)
 
 
@@ -217,7 +230,7 @@ def load_tree(tokfile, parentsfile):
     return parse_tree(sentence, parents)
 
 
-def get_tree(sentence): 
+def get_tree(sentence):
     constituency_parse(sentence)
     root = load_tree('tmp.tok', 'tmp.cparents')
     postOrder = root.postOrder
@@ -295,6 +308,7 @@ def extract_tree_data(tree, word2idx=None, max_degree=2, only_leaves_have_vals=T
 
 
 def BFStree(root, word2idx=None):
+    from collections import deque
     node = root
     leaves = []
     inodes = []
@@ -303,7 +317,6 @@ def BFStree(root, word2idx=None):
     while queue:
         node = queue.popleft()
         if func(node):
-            print(node.word)
             if word2idx:
                 if word2idx.get(node.word):
                     node.word = word2idx[node.word]
@@ -327,7 +340,7 @@ def get_max_len_data(data):
     dev_data = data['dev']
 
 
-def candidate_answer_generate(answer_data, context_sentence_roots_list):
+def candidate_answer_generate(answer_data, context_sentence_roots_list,word2idx):
     # candidate_answers: sentence_num * candidate_number * constituency_num, each is a constituency id list(reversed BFS order)
     # correct_answer_idx
     candidate_answers = []
@@ -336,27 +349,42 @@ def candidate_answer_generate(answer_data, context_sentence_roots_list):
     sentence_num = len(context_sentence_roots_list)
     overall_idx = -1
     for root in context_sentence_roots_list:
-        overall_idx += 1
+        overall_idx += 1 #sentence idx, loop each sentence
         cur_candidate_answer = []
         constituency_id2span = {}
         leaf_num = 0
-        queue = deque([node])
+        queue = deque([root]) # get all constituents for each sentence (all nodes in each tree)
+
+        ncons = 0
         while queue:
-            node = queue.poplest()
+            node = queue.popleft()
             if node.children != []:
+                ncons += 1
                 candidate_answer_overall_number += 1
-                cur_candidate_answer.append([node.idx])
+                # TODO: here list contains only 1 constituents
+                # can be expanded (check paper)
+                cur_candidate_answer.append(([node.idx]))
                 overall_idx += 1
                 queue.extend(node.children)
                 constituency_id2span[node.idx] = node.span
-                if node.get_spans == answer_data:
+
+                logging.warn("node get wordidx: {}".format(get_word_idx(node.span,word2idx=word2idx)))
+                logging.warn("answer: {}".format(answer_data))
+                if get_word_idx(node.span,word2idx=word2idx) == answer_data:
+                    logging.warn("found answer: {}".format(answer_data))
                     if correct_answer_idx != -1:
                         logging.warn('{} has duplicated candidate answers'.format(root.span))
                         correct_answer_idx = overall_idx
                     else:
                         correct_answer_idx = overall_idx
 
-        candidate_answers.append(cur_candidate_answer)
+        # need to do some padding here
+        # assume max number of constituents = 200
+        for p in range (ncons, 200):
+            cur_candidate_answer.append(([0]))
+
+
+        candidate_answers.append(cur_candidate_answer) # [sentence_num, candidate_number, constituency_idlist]
 
     return candidate_answers, correct_answer_idx, candidate_answer_overall_number
 
@@ -364,12 +392,12 @@ def candidate_answer_generate(answer_data, context_sentence_roots_list):
 if __name__ == '__main__':
     root = get_tree('Yet the act is still charming here.')
     word2idx, embedding = load_embedding()
-    # leaves,inodes=BFStree(root)
-    # for node in inodes:
-    #    print(len(node.children))
-    b_input, b_treestr, t_input, t_treestr, t_parent = extract_filled_tree(root, word2idx=word2idx)
-    print(b_input)
-    print(b_treestr)
-    print(t_input)
-    print(t_treestr)
-    print(t_parent)
+    leaves,inodes=BFStree(root)
+    for node in inodes:
+       print(len(node.children))
+    # b_input, b_treestr, t_input, t_treestr, t_parent = extract_filled_tree(root, word2idx=word2idx)
+    # print(b_input)
+    # print(b_treestr)
+    # print(t_input)
+    # print(t_treestr)
+    # print(t_parent)
