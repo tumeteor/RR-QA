@@ -356,6 +356,7 @@ class BatchGenCand:
             question_len = max(len(x) for x in batch[5])
             question_id = torch.LongTensor(batch_size, question_len).fill_(0)
             for i, doc in enumerate(batch[5]):
+                print(i)
                 question_id[i, :len(doc)] = torch.LongTensor(doc)
 
             text = list(batch[6])

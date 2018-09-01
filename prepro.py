@@ -293,7 +293,7 @@ def annotate_cand(row, wv_cased):
 
     for c_doc in c_docs:
         context_tokens = [normalize_text(w.text) for w in c_doc]
-        context_tokens_list.append(context_tokens)
+
         context_tokens_lower = [w.lower() for w in context_tokens]
         context_token_span = [(w.idx, w.idx + len(w.text)) for w in c_doc]
         context_token_span_list.append(context_token_span)
@@ -310,6 +310,12 @@ def annotate_cand(row, wv_cased):
         context_tf = [counter_[w] / total for w in context_tokens_lower]
         context_features = list(zip(match_origin, match_lower, match_lemma, context_tf))
         context_features_list.append(context_features)
+        if not wv_cased:
+            context_tokens = context_tokens_lower
+        context_tokens_list.append(context_tokens)
+
+    if not wv_cased:
+        question_tokens = question_tokens_lower
 
 
     return (id_, context_tokens_list, context_features_list, context_tags_list, context_ents_list,
