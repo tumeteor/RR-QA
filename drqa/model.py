@@ -133,7 +133,7 @@ class DocReaderModel(object):
             predictions.append(text[i][s_offset:e_offset])
             pscores.append(np.max(scores))
 
-        return predictions, pscores
+        return (predictions, pscores)
 
     def predict_cand(self, ex):
         # Eval mode
@@ -143,24 +143,50 @@ class DocReaderModel(object):
         if self.opt['cuda']:
             # ex (input): context_id, context_feature, context_tag, context_ent, context_mask,
             #           question_id, question_mask, text, span
-            inputs = [Variable(e.cuda(async=True)) for e in ex[:7]]
+            # IMPORTANT: batchsize must be 1 in this case
+            cand_size = len(ex[0])
+            inputs = []
+            for i in range(0, cand_size):
+                inputs.append([Variable(e.cuda(async=True)) for e in (ex[0][i], ex[1][i],
+                                                                      ex[2][i], ex[3][i],
+                                                                      ex[4][i], ex[5], ex[6])])
+
         else:
-            inputs = [Variable(e) for e in ex[:7]]
+            cand_size = len(ex[0])
+            inputs = []
+            for i in range(0, cand_size):
+                inputs.append([Variable(e) for e in (ex[0][i], ex[1][i],
+                                                                      ex[2][i], ex[3][i],
+                                                                      ex[4][i], ex[5], ex[6])])
+
+
 
         # Run forward
         with torch.no_grad():
-            score_s, score_e = self.network(*inputs)
+            pred = {}
+            for input in inputs:
+                score_s, score_e = self.network(*input)
+                # Transfer to CPU/normal tensors for numpy ops
+                score_s = score_s.data.cpu()
+                score_e = score_e.data.cpu()
+                # Get argmax text spans
+                text = ex[-2]
+                spans = ex[-1]
 
-        # Transfer to CPU/normal tensors for numpy ops
-        score_s = score_s.data.cpu()
-        score_e = score_e.data.cpu()
+                max_len = self.opt['max_len'] or score_s.size(1)
+                for i in range(score_s.size(0)):
+                    # i: each instance in a batch
+                    # P_start(i) * P_end(i)
+                    scores = torch.ger(score_s[i], score_e[i])
+                    scores.triu_().tril_(max_len - 1)
+                    scores = scores.numpy()
+                    # get the coordinates
+                    s_idx, e_idx = np.unravel_index(np.argmax(scores), scores.shape)
+                    s_offset, e_offset = spans[i][s_idx][0], spans[i][e_idx][1]
+                    pred[text[i][s_offset:e_offset]] = np.max(scores)
 
-        # Get argmax text spans
-        text = ex[-2]
-        spans = ex[-1]
-        predictions = []
-        max_len = self.opt['max_len'] or score_s.size(1)
-
+            pred_sorted = sorted(pred, key=pred.get, reverse=True)
+            return pred_sorted[0], pred[pred_sorted[0]]
 
 
     def save(self, filename, epoch, scores):

@@ -42,6 +42,34 @@ def prepare_test(vocab, vocab_tag, vocab_ent, wv_cased, args):
 
     return test_x, test_y
 
+def prepare_test_cand(vocab, vocab_tag, vocab_ent, wv_cased, args):
+    test = flatten_json(args.test_file, 'test')
+    with Pool(args.threads, initializer=init) as p:
+        annotate_ = partial(annotate_cand, wv_cased=wv_cased)
+        test = list(tqdm(p.imap(annotate_, test, chunksize=args.batch_size), total=len(test), desc='test'))
+    # load vocabulary from word vector files
+    wv_vocab = set()
+    with open(args.wv_file) as f:
+        for line in f:
+            token = normalize_text(line.rstrip().split(' ')[0])
+            wv_vocab.add(token)
+    print('glove vocab loaded.')
+
+    w2id = {w: i for i, w in enumerate(vocab)}
+    tag2id = {w: i for i, w in enumerate(vocab_tag)}
+    ent2id = {w: i for i, w in enumerate(vocab_ent)}
+    print('Vocabulary size: {}'.format(len(vocab)))
+    print('Found {} POS tags.'.format(len(vocab_tag)))
+    print('Found {} entity tags: {}'.format(len(vocab_ent), vocab_ent))
+
+    to_id_ = partial(to_id_cand, w2id=w2id, tag2id=tag2id, ent2id=ent2id)
+    test = list(map(to_id_, test))
+    print('converted to ids.')
+    test_x = [x[:-1] for x in test]
+    test_y = [x[-1] for x in test]
+
+    return test_x, test_y
+
 
 def main():
     args, log = setup()
@@ -242,6 +270,50 @@ def annotate(row, wv_cased):
             question_tokens, context, context_token_span) + row[3:]
 
 
+def annotate_cand(row, wv_cased):
+    global nlp
+    id_, contexts, question = row[:3]
+    q_doc = nlp(clean_spaces(question))
+    c_docs = [nlp(clean_spaces(context)) for context in contexts]
+    question_tokens = [normalize_text(w.text) for w in q_doc]
+    question_tokens_lower = [w.lower() for w in question_tokens]
+
+
+    question_lemma = {w.lemma_ if w.lemma_ != '-PRON-' else w.text.lower() for w in q_doc}
+    question_tokens_set = set(question_tokens)
+    question_tokens_lower_set = set(question_tokens_lower)
+
+    context_tokens_list = []
+    context_features_list = []
+    context_tags_list = []
+    context_ents_list = []
+    context_token_span_list = []
+
+    for c_doc in c_docs:
+        context_tokens = [normalize_text(w.text) for w in c_doc]
+        context_tokens_list.append(context_tokens)
+        context_tokens_lower = [w.lower() for w in context_tokens]
+        context_token_span = [(w.idx, w.idx + len(w.text)) for w in c_doc]
+        context_token_span_list.append(context_token_span)
+        context_tags = [w.tag_ for w in c_doc]
+        context_tags_list.append(context_tags)
+        context_ents = [w.ent_type_ for w in c_doc]
+        context_ents_list.append(context_ents)
+        match_origin = [w in question_tokens_set for w in context_tokens]
+        match_lower = [w in question_tokens_lower_set for w in context_tokens_lower]
+        match_lemma = [(w.lemma_ if w.lemma_ != '-PRON-' else w.text.lower()) in question_lemma for w in c_doc]
+        # term frequency in document
+        counter_ = collections.Counter(context_tokens_lower)
+        total = len(context_tokens_lower)
+        context_tf = [counter_[w] / total for w in context_tokens_lower]
+        context_features = list(zip(match_origin, match_lower, match_lemma, context_tf))
+        context_features_list.append(context_features)
+
+
+    return (id_, context_tokens_list, context_features_list, context_tags_list, context_ents_list,
+            question_tokens, contexts, context_token_span) + row[3:]
+
+
 def index_answer(row):
     token_span = row[-4]
     starts, ends = zip(*token_span)
@@ -284,6 +356,21 @@ def to_id(row, w2id, tag2id, ent2id, unk_id=1):
     tag_ids = [tag2id[w] if w in tag2id else 0 for w in context_tags]
     ent_ids = [ent2id[w] if w in ent2id else 0 for w in context_ents]
     return (row[0], context_ids, context_features, tag_ids, ent_ids, question_ids) + row[6:]
+
+def to_id_cand(row, w2id, tag2id, ent2id, unk_id=1):
+    context_tokens_list = row[1]
+    context_features_list = row[2]
+    context_tags_list = row[3]
+    context_ents_list = row[4]
+    question_tokens = row[5]
+    question_ids = [w2id[w] if w in w2id else unk_id for w in question_tokens]
+    context_ids = [[w2id[w] if w in w2id else unk_id for w in context_tokens]for
+                   context_tokens in context_tokens_list]
+    tag_ids = [[tag2id[w] if w in tag2id else 0 for w in context_tags]for
+                   context_tags in context_tags_list]
+    ent_ids = [[ent2id[w] if w in ent2id else 0 for w in context_ents]for
+                   context_ents in context_ents_list]
+    return (row[0], context_ids, context_features_list, tag_ids, ent_ids, question_ids) + row[6:]
 
 
 if __name__ == '__main__':

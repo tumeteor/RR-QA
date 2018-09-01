@@ -2,10 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c217646a-6a4b-4110-b286-8eeb78359e33" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/drqa/model.py" afterPath="$PROJECT_DIR$/drqa/model.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/interact.py" afterPath="$PROJECT_DIR$/interact.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/prepro-sst.py" afterPath="$PROJECT_DIR$/prepro-sst.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/prepro.py" afterPath="$PROJECT_DIR$/prepro.py" />
     </list>
     <ignored path="DrQA.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -29,11 +28,11 @@
       <file leaf-file-name="prepro.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/prepro.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-900">
-              <caret line="57" column="13" selection-start-line="57" selection-start-column="13" selection-end-line="57" selection-end-column="42" />
+            <state relative-caret-position="1050">
+              <caret line="70" column="15" selection-start-line="70" selection-start-column="15" selection-end-line="70" selection-end-column="15" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
-                <marker date="1535629652000" expanded="true" signature="1440:4449" ph="..." />
+                <marker date="1535759854000" expanded="true" signature="2603:5612" ph="..." />
               </folding>
             </state>
           </provider>
@@ -42,8 +41,8 @@
       <file leaf-file-name="model.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/drqa/model.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1455">
-              <caret line="97" column="15" selection-start-line="97" selection-start-column="8" selection-end-line="97" selection-end-column="15" />
+            <state relative-caret-position="406">
+              <caret line="188" column="53" selection-start-line="188" selection-start-column="53" selection-end-line="188" selection-end-column="53" />
               <folding>
                 <element signature="e#293#306#0" expanded="true" />
               </folding>
@@ -64,8 +63,8 @@
       <file leaf-file-name="interact.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/interact.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="556">
-              <caret line="77" column="39" selection-start-line="77" selection-start-column="39" selection-end-line="77" selection-end-column="39" />
+            <state relative-caret-position="331">
+              <caret line="41" column="57" selection-start-line="41" selection-start-column="57" selection-end-line="41" selection-end-column="57" />
               <folding />
             </state>
           </provider>
@@ -527,7 +526,7 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
-            <marker date="1535629652000" expanded="true" signature="1440:4449" ph="..." />
+            <marker date="1535759854000" expanded="true" signature="2603:5612" ph="..." />
           </folding>
         </state>
       </provider>
@@ -609,7 +608,7 @@
           <caret line="280" column="77" selection-start-line="280" selection-start-column="62" selection-end-line="280" selection-end-column="77" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
-            <marker date="1535629652000" expanded="true" signature="1440:4449" ph="..." />
+            <marker date="1535759854000" expanded="true" signature="2603:5612" ph="..." />
           </folding>
         </state>
       </provider>
@@ -691,7 +690,7 @@
           <caret line="280" column="77" selection-start-line="280" selection-start-column="62" selection-end-line="280" selection-end-column="77" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
-            <marker date="1535629652000" expanded="true" signature="1440:4449" ph="..." />
+            <marker date="1535759854000" expanded="true" signature="2603:5612" ph="..." />
           </folding>
         </state>
       </provider>
@@ -773,7 +772,7 @@
           <caret line="223" column="41" selection-start-line="223" selection-start-column="36" selection-end-line="223" selection-end-column="41" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
-            <marker date="1535629652000" expanded="true" signature="1440:4449" ph="..." />
+            <marker date="1535759854000" expanded="true" signature="2603:5612" ph="..." />
           </folding>
         </state>
       </provider>
@@ -923,14 +922,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/drqa/rnn_reader.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="490">
-          <caret line="151" column="16" selection-start-line="151" selection-start-column="16" selection-end-line="151" selection-end-column="16" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/drqa/utils.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -939,10 +930,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/drqa/rnn_reader.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="490">
+          <caret line="151" column="16" selection-start-line="151" selection-start-column="16" selection-end-line="151" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/drqa/model.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1455">
-          <caret line="97" column="15" selection-start-line="97" selection-start-column="8" selection-end-line="97" selection-end-column="15" />
+        <state relative-caret-position="406">
+          <caret line="188" column="53" selection-start-line="188" selection-start-column="53" selection-end-line="188" selection-end-column="53" />
           <folding>
             <element signature="e#293#306#0" expanded="true" />
           </folding>
@@ -951,19 +950,19 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/prepro.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-900">
-          <caret line="57" column="13" selection-start-line="57" selection-start-column="13" selection-end-line="57" selection-end-column="42" />
+        <state relative-caret-position="1050">
+          <caret line="70" column="15" selection-start-line="70" selection-start-column="15" selection-end-line="70" selection-end-column="15" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
-            <marker date="1535629652000" expanded="true" signature="1440:4449" ph="..." />
+            <marker date="1535759854000" expanded="true" signature="2603:5612" ph="..." />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/interact.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="556">
-          <caret line="77" column="39" selection-start-line="77" selection-start-column="39" selection-end-line="77" selection-end-column="39" />
+        <state relative-caret-position="331">
+          <caret line="41" column="57" selection-start-line="41" selection-start-column="57" selection-end-line="41" selection-end-column="57" />
           <folding />
         </state>
       </provider>

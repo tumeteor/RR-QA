@@ -27,7 +27,7 @@ parser.add_argument("--batch", type=str2bool, nargs='?',
                     const=True, default=True,
                     help='whether to use batch evaluation.')
 
-parser.add_argument('--test_file', default='HBCP/effect/dev.effect.json',
+parser.add_argument('--test_file', default='HBCP/effect/dev.effect_cand.json',
                     help='path to dev file.')
 parser.add_argument('--wv_file', default='glove/glove.840B.300d.txt',
                     help='path to word vector file.')
@@ -107,7 +107,7 @@ else:
         annotated = annotate(('interact-{}'.format(id_), evidence, question), meta['wv_cased'])
         model_in = to_id(annotated, w2id, tag2id, ent2id)
         model_in = next(iter(BatchGen([model_in], batch_size=1, gpu=args.cuda, evaluation=True)))
-        prediction, score = model.predict(model_in)[0]
+        prediction, score = model.predict(model_in)
         end_time = time.time()
         print('Answer: {}, score: {}'.format(prediction, score))
         print('Time: {:.4f}s'.format(end_time - start_time))
