@@ -189,12 +189,13 @@ class DocReaderModel(object):
                     try:
                         s_offset, e_offset = spans[i][s_idx][0], spans[i][e_idx][1]
                         pred[tuple(text[i][s_offset:e_offset])] = np.max(scores)
+                        print("text {}: {}".format(i, text[i]))
+                        print("aa: {}".format(text[i][s_offset:e_offset]))
+                        print("spans {}: {}".format(i, spans[i]))
                     except IndexError:
                         pred[tuple("")] = 0
 
-                    print("text {}: {}".format(i, text[i]))
-                    print("aa: {}".format(text[i][s_offset:e_offset]))
-                    print("spans {}: {}".format(i, spans[i]))
+
 
             pred_sorted = sorted(pred, key=pred.get, reverse=True)
             return (list(pred_sorted[0]), pred[pred_sorted[0]])
