@@ -355,24 +355,24 @@ class BatchGenCand:
 
             for k in range(0, cand_size):
                 context_len = max(len(x) for x in batch[1][k])
-                context_id = torch.LongTensor(cand_size, context_len).fill_(0)
-                for i, doc in enumerate(batch[k][1]):
+                context_id = torch.LongTensor(len(batch[1][k]), context_len).fill_(0)
+                for i, doc in enumerate(batch[1][k]):
                     context_id[i, :len(doc)] = torch.LongTensor(doc)
 
-                feature_len = len(batch[k][2][0][0])
+                feature_len = len(batch[2][k][0][0])
 
-                context_feature = torch.Tensor(cand_size, context_len, feature_len).fill_(0)
-                for i, doc in enumerate(batch[k][2]):
+                context_feature = torch.Tensor(len(batch[1][k]), context_len, feature_len).fill_(0)
+                for i, doc in enumerate(batch[2][k]):
                     for j, feature in enumerate(doc):
                         context_feature[i, j, :] = torch.Tensor(feature)
 
-                context_tag = torch.Tensor(cand_size, context_len, self.pos_size).fill_(0)
-                for i, doc in enumerate(batch[k][3]):
+                context_tag = torch.Tensor(len(batch[1][k]), context_len, self.pos_size).fill_(0)
+                for i, doc in enumerate(batch[3][k]):
                     for j, tag in enumerate(doc):
                         context_tag[i, j, tag] = 1
 
-                context_ent = torch.Tensor(cand_size, context_len, self.ner_size).fill_(0)
-                for i, doc in enumerate(batch[k][4]):
+                context_ent = torch.Tensor(len(batch[1][k]), context_len, self.ner_size).fill_(0)
+                for i, doc in enumerate(batch[4][k]):
                     for j, ent in enumerate(doc):
                         context_ent[i, j, ent] = 1
                 context_mask = torch.eq(context_id, 0)
