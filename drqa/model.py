@@ -149,7 +149,8 @@ class DocReaderModel(object):
             for i in range(0, cand_size):
                 inputs.append([Variable(e.cuda(async=True)).unsqueeze(0) for e in (ex[0][i], ex[1][i],
                                                                       ex[2][i], ex[3][i],
-                                                                      ex[4][i], ex[5], ex[6])])
+                                                                      ex[4][i])].
+                              extend([Variable(e.cuda(async=True))for e in (ex[5], ex[6])]))
 
         else:
             cand_size = len(ex[0])
@@ -157,8 +158,8 @@ class DocReaderModel(object):
             for i in range(0, cand_size):
                 inputs.append([Variable(e).unsqueeze(0) for e in (ex[0][i], ex[1][i],
                                                                       ex[2][i], ex[3][i],
-                                                                      ex[4][i], ex[5], ex[6])])
-
+                                                                      ex[4][i])].
+                              extend([Variable(e.cuda(async=True))for e in (ex[5], ex[6])]))
 
 
         # Run forward
