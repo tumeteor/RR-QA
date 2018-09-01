@@ -27,7 +27,7 @@ parser.add_argument("--batch", type=str2bool, nargs='?',
                     const=True, default=True,
                     help='whether to use batch evaluation.')
 
-parser.add_argument('--test_file', default='HBCP/effect/dev.effect.cand.json',
+parser.add_argument('--test_file', default='HBCP/effect/test.effect.cand.json',
                     help='path to dev file.')
 parser.add_argument('--wv_file', default='glove/glove.840B.300d.txt',
                     help='path to word vector file.')
@@ -64,19 +64,19 @@ opt['embedding_dim'] = embedding.size(1)
 opt['pos_size'] = len(meta['vocab_tag'])
 opt['ner_size'] = len(meta['vocab_ent'])
 opt['cuda'] = args.cuda
-BatchGenCand.pos_size = opt['pos_size']
-BatchGenCand.ner_size = opt['ner_size']
+BatchGen.pos_size = opt['pos_size']
+BatchGen.ner_size = opt['ner_size']
 model = DocReaderModel(opt, embedding, state_dict)
 
 if (args.batch):
-    test, test_y = prepare_test_cand(meta['vocab'], meta['vocab_tag'], meta['vocab_ent'], meta['wv_cased'], args)
+    test, test_y = prepare_test(meta['vocab'], meta['vocab_tag'], meta['vocab_ent'], meta['wv_cased'], args)
 
-    batches = BatchGenCand(test, batch_size=args.batch_size, evaluation=True, gpu=args.cuda)
+    batches = BatchGen(test, batch_size=args.batch_size, evaluation=True, gpu=args.cuda)
     predictions = []
     scores = []
     
     for i, batch in enumerate(batches):
-        p, s = model.predict_cand(batch)
+        p, s = model.predict(batch)
         predictions.extend(p)
         scores.extend(s)
         #print('> evaluating [{}/{}]'.format(i, len(batches)))
