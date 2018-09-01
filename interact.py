@@ -73,9 +73,6 @@ model = DocReaderModel(opt, embedding, state_dict)
 candidateMode = False
 
 if (args.batch):
-    with open("HBCP/effect/test.effect.dict.pkl", "rb") as f:
-        cqDict = pickle.load(f)
-
     test, test_y = prepare_test(meta['vocab'], meta['vocab_tag'], meta['vocab_ent'], meta['wv_cased'], args)
 
     batches = BatchGen(test, batch_size=args.batch_size, evaluation=True, gpu=args.cuda)
@@ -87,16 +84,19 @@ if (args.batch):
         predictions.extend(p)
         scores.extend(s)
         #print('> evaluating [{}/{}]'.format(i, len(batches)))
-    assert len(predictions) == len(cqDict)
-    cDict = {}
-    for i in range(0, len(predictions)):
-        qid = cqDict[i]
-        if qid in cDict:
-            cDict[qid].append(i)
-        else:
-            cDict[qid] = [i]
+
 
     if (candidateMode):
+        with open("HBCP/effect/test.effect.dict.pkl", "rb") as f:
+            cqDict = pickle.load(f)
+        assert len(predictions) == len(cqDict)
+        cDict = {}
+        for i in range(0, len(predictions)):
+            qid = cqDict[i]
+            if qid in cDict:
+                cDict[qid].append(i)
+            else:
+                cDict[qid] = [i]
         actualPredictions = []
         actualAns = []
         actualScores = []
