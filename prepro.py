@@ -224,6 +224,7 @@ def flatten_json(data_file, mode):
 
 def clean_spaces(text):
     """normalize spaces in a string."""
+    #if text[0] == "": text = ""
     text = re.sub(r'\s', ' ', text)
     return text
 

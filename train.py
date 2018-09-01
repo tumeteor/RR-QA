@@ -367,6 +367,7 @@ class BatchGenCand:
 
             for k in range(0, cand_size):
                 context_len = max(len(x) for x in batch[1][k])
+                print("context_len :{}".format(context_len))
                 context_id = torch.LongTensor(len(batch[1][k]), context_len).fill_(0)
                 for i, doc in enumerate(batch[1][k]):
                     context_id[i, :len(doc)] = torch.LongTensor(doc)
@@ -465,10 +466,11 @@ def score(pred, truth, evaluation=False):
     assert len(pred) == len(truth)
     f1 = em = total = 0
     for p, t in zip(pred, truth):
-        print(p + " " + t[0])
+        #print(p + " " + t)
         total += 1
         em += _exact_match(p, t)
         f1 += _f1_score(p, t)
+    print("number of EM: {}".format(em))
     pre = 100. * em / total
     f1 = 100. * f1 / total
     if evaluation:

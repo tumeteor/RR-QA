@@ -1,3 +1,4 @@
+import numpy as np
 import time
 import argparse
 import torch
@@ -28,7 +29,7 @@ parser.add_argument("--batch", type=str2bool, nargs='?',
                     const=True, default=True,
                     help='whether to use batch evaluation.')
 
-parser.add_argument('--test_file', default='HBCP/effect/test.effect.cand.json',
+parser.add_argument('--test_file', default='HBCP/effect/dev.effect.json',
                     help='path to dev file.')
 parser.add_argument('--wv_file', default='glove/glove.840B.300d.txt',
                     help='path to word vector file.')
@@ -95,23 +96,30 @@ if (args.batch):
 
     actualPredictions = []
     actualAns = []
+    actualScores = []
 
     for qid in cDict:
         # group by att + docid
         # and get the prediction with max score
-        cList = cDict[qid]
+        cList = np.array(cDict[qid])
         pScores = [scores[idx] for idx in cList]
-        bestIdx = cList[scores.index(max(scores))]
-        bestP = predictions[bestIdx]
-        bestS = scores[bestIdx]
+        #bestIdx = cList[pScores.index(max(pScores))]
+        bestIdx = cList.argsort()[-1:][::-1]
+        bestP = [predictions[idx] for idx in bestIdx] 
+        bestS = [scores[idx] for idx in bestIdx]
         ans = qid.split("\t")[-1]
         actualPredictions.append(bestP)
         actualAns.append(ans)
+        actualScores.append(bestS)
 
+    for i in range(0, len(actualAns)):
+      print("{}, {}, {}".format(actualPredictions[i], actualScores[i], actualAns[i]))
 
-
-
-    em, f1 = score(actualPredictions, actualAns, evaluation=True)
+    em, f1 = score(actualAns, actualPredictions, evaluation=True)
+    print("dev EM: {} F1: {}".format(em, f1))
+    
+    em, f1 = score(predictions, test_y, evaluation=True)
+    print("test size: {}".format(len(test_y)))
     print("dev EM: {} F1: {}".format(em, f1))
 else:
     w2id = {w: i for i, w in enumerate(meta['vocab'])}
