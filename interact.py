@@ -70,6 +70,8 @@ BatchGen.pos_size = opt['pos_size']
 BatchGen.ner_size = opt['ner_size']
 model = DocReaderModel(opt, embedding, state_dict)
 
+candidateMode = False
+
 if (args.batch):
     with open("HBCP/effect/test.effect.dict.pkl", "rb") as f:
         cqDict = pickle.load(f)
@@ -94,29 +96,30 @@ if (args.batch):
         else:
             cDict[qid] = [i]
 
-    actualPredictions = []
-    actualAns = []
-    actualScores = []
+    if (candidateMode):
+        actualPredictions = []
+        actualAns = []
+        actualScores = []
 
-    for qid in cDict:
-        # group by att + docid
-        # and get the prediction with max score
-        cList = np.array(cDict[qid])
-        pScores = [scores[idx] for idx in cList]
-        #bestIdx = cList[pScores.index(max(pScores))]
-        bestIdx = cList.argsort()[-1:][::-1]
-        bestP = [predictions[idx] for idx in bestIdx] 
-        bestS = [scores[idx] for idx in bestIdx]
-        ans = qid.split("\t")[-1]
-        actualPredictions.append(bestP)
-        actualAns.append(ans)
-        actualScores.append(bestS)
+        for qid in cDict:
+            # group by att + docid
+            # and get the prediction with max score
+            cList = np.array(cDict[qid])
+            pScores = [scores[idx] for idx in cList]
+            # bestIdx = cList[pScores.index(max(pScores))]
+            bestIdx = cList.argsort()[-1:][::-1]
+            bestP = [predictions[idx] for idx in bestIdx]
+            bestS = [scores[idx] for idx in bestIdx]
+            ans = qid.split("\t")[-1]
+            actualPredictions.append(bestP)
+            actualAns.append(ans)
+            actualScores.append(bestS)
 
-    for i in range(0, len(actualAns)):
-      print("{}, {}, {}".format(actualPredictions[i], actualScores[i], actualAns[i]))
+        for i in range(0, len(actualAns)):
+            print("{}, {}, {}".format(actualPredictions[i], actualScores[i], actualAns[i]))
 
-    em, f1 = score(actualAns, actualPredictions, evaluation=True)
-    print("dev EM: {} F1: {}".format(em, f1))
+        em, f1 = score(actualAns, actualPredictions, evaluation=True)
+        print("dev EM: {} F1: {}".format(em, f1))
     
     em, f1 = score(predictions, test_y, evaluation=True)
     print("test size: {}".format(len(test_y)))
