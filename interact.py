@@ -4,7 +4,7 @@ import torch
 import msgpack
 from drqa.model import DocReaderModel
 from drqa.utils import str2bool
-from prepro import annotate, to_id, init, prepare_test
+from prepro import annotate, to_id, init, prepare_test, prepare_test_cand
 from train import BatchGen, score
 
 import multiprocessing
@@ -69,7 +69,7 @@ BatchGen.ner_size = opt['ner_size']
 model = DocReaderModel(opt, embedding, state_dict)
 
 if (args.batch):
-    test, test_y = prepare_test(meta['vocab'], meta['vocab_tag'], meta['vocab_ent'], meta['wv_cased'], args)
+    test, test_y = prepare_test_cand(meta['vocab'], meta['vocab_tag'], meta['vocab_ent'], meta['wv_cased'], args)
 
     batches = BatchGen(test, batch_size=args.batch_size, evaluation=True, gpu=args.cuda)
     predictions = []

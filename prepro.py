@@ -207,7 +207,6 @@ def flatten_json(data_file, mode):
     for article in data:
         for paragraph in article['paragraphs']:
             context = paragraph['context']
-            print(context)
             for qa in paragraph['qas']:
                 id_, question, answers = qa['id'], qa['question'], qa['answers']
                 if mode == 'train':
