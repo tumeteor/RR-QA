@@ -207,6 +207,8 @@ def flatten_json(data_file, mode):
     for article in data:
         for paragraph in article['paragraphs']:
             context = paragraph['context']
+            if len(context) == 0:
+                context = [""]
             for qa in paragraph['qas']:
                 id_, question, answers = qa['id'], qa['question'], qa['answers']
                 if mode == 'train':
@@ -288,7 +290,6 @@ def annotate_cand(row, wv_cased):
     context_ents_list = []
     context_token_span_list = []
 
-    print("candidate size: {}".format(len(c_docs)))
 
     for c_doc in c_docs:
         context_tokens = [normalize_text(w.text) for w in c_doc]

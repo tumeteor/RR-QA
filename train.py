@@ -309,6 +309,111 @@ class BatchGen:
                        question_id, question_mask, y_s, y_e, text, span)
 
 
+class BatchGenCand:
+    pos_size = None
+    ner_size = None
+
+    def __init__(self, data, batch_size, gpu, evaluation=False):
+        """
+        input:
+            data - list of lists
+            batch_size - int
+        """
+        self.batch_size = batch_size
+        self.eval = evaluation
+        self.gpu = gpu
+
+        # sort by len
+        # data = sorted(data, key=lambda x: len(x[1]))
+        # chunk into batches
+        data = [data[i:i + batch_size] for i in range(0, len(data), batch_size)]
+
+        # shuffle
+        if not evaluation:
+            random.shuffle(data)
+
+        self.data = data
+
+    def __len__(self):
+        return len(self.data)
+
+    def __iter__(self):
+        for batch in self.data:
+            batch_size = len(batch)
+            batch = list(zip(*batch))
+            if self.eval:
+                assert len(batch) == 8
+            else:
+                assert len(batch) == 10
+
+            cand_size = len(batch[1])
+            context_id_list = []
+            context_feature_list = []
+            context_tag_list = []
+            context_ent_list = []
+            context_mask_list = []
+
+            for k in range(0, cand_size):
+                context_len = max(len(x) for x in batch[1][k])
+                context_id = torch.LongTensor(batch_size, context_len).fill_(0)
+                for i, doc in enumerate(batch[1][k]):
+                    context_id[i, :len(doc)] = torch.LongTensor(doc)
+
+                feature_len = len(batch[2][k][0][0])
+
+                context_feature = torch.Tensor(batch_size, context_len, feature_len).fill_(0)
+                for i, doc in enumerate(batch[2][k]):
+                    for j, feature in enumerate(doc):
+                        context_feature[i, j, :] = torch.Tensor(feature)
+
+                context_tag = torch.Tensor(batch_size, context_len, self.pos_size).fill_(0)
+                for i, doc in enumerate(batch[3][k]):
+                    for j, tag in enumerate(doc):
+                        context_tag[i, j, tag] = 1
+
+                context_ent = torch.Tensor(batch_size, context_len, self.ner_size).fill_(0)
+                for i, doc in enumerate(batch[4][k]):
+                    for j, ent in enumerate(doc):
+                        context_ent[i, j, ent] = 1
+                context_mask = torch.eq(context_id, 0)
+                question_mask = torch.eq(question_id, 0)
+                if self.gpu:
+                    context_id = context_id.pin_memory()
+                    context_feature = context_feature.pin_memory()
+                    context_tag = context_tag.pin_memory()
+                    context_ent = context_ent.pin_memory()
+                    context_mask = context_mask.pin_memory()
+                context_id_list.append(context_id)
+                context_feature_list.append(context_feature)
+                context_tag_list.append(context_tag)
+                context_ent_list.append(context_ent)
+                context_mask_list.append(context_mask)
+
+
+            if self.gpu:
+                question_id = question_id.pin_memory()
+                question_mask = question_mask.pin_memory()
+
+            question_len = max(len(x) for x in batch[5])
+            question_id = torch.LongTensor(batch_size, question_len).fill_(0)
+            for i, doc in enumerate(batch[5]):
+                question_id[i, :len(doc)] = torch.LongTensor(doc)
+
+
+            text = list(batch[6])
+            span = list(batch[7])
+            if not self.eval:
+                y_s = torch.LongTensor(batch[8])
+                y_e = torch.LongTensor(batch[9])
+
+            if self.eval:
+                yield (context_id, context_feature, context_tag, context_ent, context_mask,
+                       question_id, question_mask, text, span)
+            else:
+                yield (context_id_list, context_feature_list, context_tag_list, context_ent_list, context_mask_list,
+                       question_id, question_mask, y_s, y_e, text, span)
+
+
 def _normalize_answer(s):
     def remove_articles(text):
         return re.sub(r'\b(a|an|the)\b', ' ', text)
