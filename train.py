@@ -353,6 +353,17 @@ class BatchGenCand:
             context_ent_list = []
             context_mask_list = []
 
+            question_len = max(len(x) for x in batch[5])
+            question_id = torch.LongTensor(batch_size, question_len).fill_(0)
+            for i, doc in enumerate(batch[5]):
+                question_id[i, :len(doc)] = torch.LongTensor(doc)
+
+            text = list(batch[6])
+            span = list(batch[7])
+            if not self.eval:
+                y_s = torch.LongTensor(batch[8])
+                y_e = torch.LongTensor(batch[9])
+
             for k in range(0, cand_size):
                 context_len = max(len(x) for x in batch[1][k])
                 context_id = torch.LongTensor(len(batch[1][k]), context_len).fill_(0)
@@ -394,17 +405,6 @@ class BatchGenCand:
                 question_id = question_id.pin_memory()
                 question_mask = question_mask.pin_memory()
 
-            question_len = max(len(x) for x in batch[5])
-            question_id = torch.LongTensor(batch_size, question_len).fill_(0)
-            for i, doc in enumerate(batch[5]):
-                question_id[i, :len(doc)] = torch.LongTensor(doc)
-
-
-            text = list(batch[6])
-            span = list(batch[7])
-            if not self.eval:
-                y_s = torch.LongTensor(batch[8])
-                y_e = torch.LongTensor(batch[9])
 
             if self.eval:
                 yield (context_id, context_feature, context_tag, context_ent, context_mask,

@@ -5,7 +5,7 @@ import msgpack
 from drqa.model import DocReaderModel
 from drqa.utils import str2bool
 from prepro import annotate, to_id, init, prepare_test, prepare_test_cand
-from train import BatchGen, score
+from train import BatchGen, BatchGenCand, score
 
 import multiprocessing
 """
@@ -64,14 +64,14 @@ opt['embedding_dim'] = embedding.size(1)
 opt['pos_size'] = len(meta['vocab_tag'])
 opt['ner_size'] = len(meta['vocab_ent'])
 opt['cuda'] = args.cuda
-BatchGen.pos_size = opt['pos_size']
-BatchGen.ner_size = opt['ner_size']
+BatchGenCand.pos_size = opt['pos_size']
+BatchGenCand.ner_size = opt['ner_size']
 model = DocReaderModel(opt, embedding, state_dict)
 
 if (args.batch):
     test, test_y = prepare_test_cand(meta['vocab'], meta['vocab_tag'], meta['vocab_ent'], meta['wv_cased'], args)
 
-    batches = BatchGen(test, batch_size=args.batch_size, evaluation=True, gpu=args.cuda)
+    batches = BatchGenCand(test, batch_size=args.batch_size, evaluation=True, gpu=args.cuda)
     predictions = []
     scores = []
     
