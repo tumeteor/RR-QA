@@ -186,8 +186,12 @@ class DocReaderModel(object):
                     scores = scores.numpy()
                     # get the coordinates
                     s_idx, e_idx = np.unravel_index(np.argmax(scores), scores.shape)
-                    s_offset, e_offset = spans[i][s_idx][0], spans[i][e_idx][1]
-                    pred[tuple(text[i][s_offset:e_offset])] = np.max(scores)
+                    try:
+                        s_offset, e_offset = spans[i][s_idx][0], spans[i][e_idx][1]
+                        pred[tuple(text[i][s_offset:e_offset])] = np.max(scores)
+                    except IndexError:
+                        pred[tuple("")] = 0
+
                     print("text {}: {}".format(i, text[i]))
                     print("aa: {}".format(text[i][s_offset:e_offset]))
                     print("spans {}: {}".format(i, spans[i]))
