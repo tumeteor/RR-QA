@@ -173,12 +173,13 @@ class DocReaderModel(object):
                 # Transfer to CPU/normal tensors for numpy ops
                 score_s = score_s.data.cpu()
                 score_e = score_e.data.cpu()
-                # Get argmax text spans
-                text = ex[-2][k] # context (text) list
-                spans = ex[-1][k] # context span list
+
 
                 max_len = self.opt['max_len'] or score_s.size(1)
                 for i in range(score_s.size(0)):
+                    # Get argmax text spans
+                    text = ex[-2][i][k]  # context (text) list
+                    spans = ex[-1][i][k]  # context span list
                     # i: each instance in a batch
                     # P_start(i) * P_end(i)
                     scores = torch.ger(score_s[i], score_e[i])
@@ -194,8 +195,6 @@ class DocReaderModel(object):
                         print("spans {}: {}".format(i, spans[i]))
                     except IndexError:
                         pred[tuple("")] = 0
-
-
 
             pred_sorted = sorted(pred, key=pred.get, reverse=True)
             return (list(pred_sorted[0]), pred[pred_sorted[0]])
