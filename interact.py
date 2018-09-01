@@ -76,9 +76,9 @@ if (args.batch):
     scores = []
     
     for i, batch in enumerate(batches):
-        p, score = model.predict_cand(batch)
+        p, s = model.predict_cand(batch)
         predictions.extend(p)
-        scores.extend(score)
+        scores.extend(s)
         #print('> evaluating [{}/{}]'.format(i, len(batches)))
     em, f1 = score(predictions, test_y, evaluation=True)
     print("dev EM: {} F1: {}".format(em, f1))

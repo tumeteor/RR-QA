@@ -167,14 +167,15 @@ class DocReaderModel(object):
         # Run forward
         with torch.no_grad():
             pred = {}
-            for input in inputs:
+            for k in range(0, cand_size):
+                input = inputs[k]
                 score_s, score_e = self.network(*input)
                 # Transfer to CPU/normal tensors for numpy ops
                 score_s = score_s.data.cpu()
                 score_e = score_e.data.cpu()
                 # Get argmax text spans
-                text = ex[-2]
-                spans = ex[-1]
+                text = ex[-2][k] # context (text) list
+                spans = ex[-1][k] # context span list
 
                 max_len = self.opt['max_len'] or score_s.size(1)
                 for i in range(score_s.size(0)):
@@ -186,10 +187,13 @@ class DocReaderModel(object):
                     # get the coordinates
                     s_idx, e_idx = np.unravel_index(np.argmax(scores), scores.shape)
                     s_offset, e_offset = spans[i][s_idx][0], spans[i][e_idx][1]
-                    pred[text[i][s_offset:e_offset]] = np.max(scores)
+                    pred[tuple(text[i][s_offset:e_offset])] = np.max(scores)
+                    print("text {}: {}".format(i, text[i]))
+                    print("aa: {}".format(text[i][s_offset:e_offset]))
+                    print("spans {}: {}".format(i, spans[i]))
 
             pred_sorted = sorted(pred, key=pred.get, reverse=True)
-            return pred_sorted[0], pred[pred_sorted[0]]
+            return (list(pred_sorted[0]), pred[pred_sorted[0]])
 
 
     def save(self, filename, epoch, scores):
