@@ -6,6 +6,7 @@ from drqa.model import DocReaderModel
 from drqa.utils import str2bool
 from prepro import annotate, to_id, init, prepare_test, prepare_test_cand
 from train import BatchGen, BatchGenCand, score
+import six.moves.cPickle as pickle
 
 import multiprocessing
 """
@@ -69,6 +70,9 @@ BatchGen.ner_size = opt['ner_size']
 model = DocReaderModel(opt, embedding, state_dict)
 
 if (args.batch):
+    with open("HBCP/effect/test.effect.dict.pkl", "rb") as f:
+        cqDict = pickle.load(f)
+
     test, test_y = prepare_test(meta['vocab'], meta['vocab_tag'], meta['vocab_ent'], meta['wv_cased'], args)
 
     batches = BatchGen(test, batch_size=args.batch_size, evaluation=True, gpu=args.cuda)
@@ -80,7 +84,34 @@ if (args.batch):
         predictions.extend(p)
         scores.extend(s)
         #print('> evaluating [{}/{}]'.format(i, len(batches)))
-    em, f1 = score(predictions, test_y, evaluation=True)
+    assert len(predictions) == len(cqDict)
+    cDict = {}
+    for i in range(0, len(predictions)):
+        qid = cqDict[i]
+        if qid in cDict:
+            cDict[qid].append(i)
+        else:
+            cDict[qid] = [i]
+
+    actualPredictions = []
+    actualAns = []
+
+    for qid in cDict:
+        # group by att + docid
+        # and get the prediction with max score
+        cList = cDict[qid]
+        pScores = [scores[idx] for idx in cList]
+        bestIdx = cList[scores.index(max(scores))]
+        bestP = predictions[bestIdx]
+        bestS = scores[bestIdx]
+        ans = qid.split("\t")[-1]
+        actualPredictions.append(bestP)
+        actualAns.append(ans)
+
+
+
+
+    em, f1 = score(actualPredictions, actualAns, evaluation=True)
     print("dev EM: {} F1: {}".format(em, f1))
 else:
     w2id = {w: i for i, w in enumerate(meta['vocab'])}
