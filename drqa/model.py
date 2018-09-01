@@ -151,7 +151,7 @@ class DocReaderModel(object):
                                                                       ex[2][i], ex[3][i],
                                                                       ex[4][i])]
                 x = x.extend([Variable(e.cuda(async=True))for e in (ex[5], ex[6])])
-                inputs.append()
+                inputs.append(x)
 
         else:
             cand_size = len(ex[0])
