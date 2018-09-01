@@ -27,7 +27,7 @@ parser.add_argument("--batch", type=str2bool, nargs='?',
                     const=True, default=True,
                     help='whether to use batch evaluation.')
 
-parser.add_argument('--test_file', default='HBCP/effect/dev.effect_cand.json',
+parser.add_argument('--test_file', default='HBCP/effect/dev.effect.cand.json',
                     help='path to dev file.')
 parser.add_argument('--wv_file', default='glove/glove.840B.300d.txt',
                     help='path to word vector file.')
