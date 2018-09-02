@@ -103,6 +103,9 @@ if (args.batch):
         actualAns = []
         actualScores = []
 
+
+        attPreDict = {}
+        attAnsDict = {}
         for qid in cDict:
             # group by att + docid
             # and get the prediction with max score
@@ -118,11 +121,28 @@ if (args.batch):
             actualAns.append(ans)
             actualScores.append(bestS)
 
+            att = qid.split("\t")[0]
+            if att in attPreDict:
+                attPreDict[att].append(bestP)
+                attAnsDict[att].append(ans)
+            else:
+                attPreDict[att] = [bestP]
+                attAnsDict[att] = [ans]
+
+        for att in attPreDict:
+            print("att: {}".format(att))
+            score(attPreDict[att], attAnsDict[att], evaluation=True)
+            print("test size: {}".format(len(attAnsDict[att])))
+
+
+
         for i in range(0, len(actualAns)):
             print("{}, {}, {}".format(actualPredictions[i], actualScores[i], actualAns[i]))
 
         em, f1 = score(actualAns, actualPredictions, evaluation=True)
         print("dev EM: {} F1: {}".format(em, f1))
+
+
 
     # attributes = [[63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76],
     #               [42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62],                  [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18],
