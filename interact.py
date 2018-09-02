@@ -83,6 +83,8 @@ if (args.batch):
         p, s = model.predict(batch)
         predictions.extend(p)
         scores.extend(s)
+        print("prediction :{}".format(p))
+        print("score: {}".format(s))
         #print('> evaluating [{}/{}]'.format(i, len(batches)))
 
 
