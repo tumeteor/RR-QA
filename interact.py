@@ -131,8 +131,12 @@ if (args.batch):
         pre = [predictions[idx] for idx in att]
         tru = [test_y[idx] for idx in att]
         em, f1 = score(pre, tru, evaluation=True)
-        print("test size: {}".format(len(test_y)))
+        print("test size: {}".format(len(tru)))
         print("dev EM: {} F1: {}".format(em, f1))
+
+    em, f1 = score(predictions, test_y, evaluation=True)
+    print("test size: {}".format(len(test_y)))
+    print("dev EM: {} F1: {}".format(em, f1))
     
 
 else:
