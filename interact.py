@@ -109,7 +109,8 @@ if (args.batch):
             cList = np.array(cDict[qid])
             pScores = [scores[idx] for idx in cList]
             # bestIdx = cList[pScores.index(max(pScores))]
-            bestIdx = cList.argsort()[-1:][::-1]
+            # fixed! get relative indices from pScores -> get actual from cList
+            bestIdx = [cList[idx] for idx in pScores.argsort()[-1:][::-1]]
             bestP = [predictions[idx] for idx in bestIdx]
             bestS = [scores[idx] for idx in bestIdx]
             ans = qid.split("\t")[-1]
