@@ -206,7 +206,7 @@ def load_data(opt):
     with open('HBCP/effect/meta.msgpack', 'rb') as f:
         meta = msgpack.load(f, encoding='utf8')
     embedding = torch.Tensor(meta['embedding'])
-    opt['ranker'] = False # for ranker component
+    opt['ranker'] = True # for ranker component
     opt['pretrained_words'] = True
     opt['vocab_size'] = embedding.size(0)
     opt['embedding_dim'] = embedding.size(1)

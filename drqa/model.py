@@ -76,10 +76,10 @@ class DocReaderModel(object):
         target_s = ex[7].to(self.device) #start index
         target_e = ex[8].to(self.device) #end index
 
-        if target_s == 0:
+        if target_s == -1: # not target sentence
             y_rank = 0
         else:
-            y_rank = 1
+            y_rank = 1 # is the target sentence
 
         #TODO: load labels for ranker learning
         # y_rank = ex[9].to(self.device)
