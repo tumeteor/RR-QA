@@ -95,9 +95,9 @@ def setup():
     # system
     parser.add_argument('--log_per_updates', type=int, default=3,
                         help='log model loss per x updates (mini-batches).')
-    parser.add_argument('--data_file', default='HBCP/effect/data.msgpack',
+    parser.add_argument('--data_file', default='HBCP/effect-all/data.msgpack',
                         help='path to preprocessed data file.')
-    parser.add_argument('--model_dir', default='models/HBCP/effect',
+    parser.add_argument('--model_dir', default='models/HBCP-all/effect',
                         help='path to store saved models.')
     parser.add_argument('--save_last_only', action='store_true',
                         help='only save the final models.')
@@ -203,7 +203,7 @@ def lr_decay(optimizer, lr_decay):
 
 
 def load_data(opt):
-    with open('HBCP/effect/meta.msgpack', 'rb') as f:
+    with open('HBCP/effect-all/meta.msgpack', 'rb') as f:
         meta = msgpack.load(f, encoding='utf8')
     embedding = torch.Tensor(meta['embedding'])
     opt['ranker'] = True # for ranker component
