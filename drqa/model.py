@@ -75,12 +75,9 @@ class DocReaderModel(object):
         inputs = [e.to(self.device) for e in ex[:7]]
         target_s = ex[7].to(self.device) #start index
         target_e = ex[8].to(self.device) #end index
-
-        if target_s == -1: # not target sentence
-            y_rank = 0
-        else:
-            y_rank = 1 # is the target sentence
-
+        # is target_s = -1 (no ans) then the label of sentence
+        # y_rank = 0 else y_rank = 1 (has answer)
+        y_rank = torch.tensor([0 if x.item() == -1 else 1 for x in target_s])
         #TODO: load labels for ranker learning
         # y_rank = ex[9].to(self.device)
 
