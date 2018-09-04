@@ -73,14 +73,34 @@ class DocReaderModel(object):
 
         # Transfer to GPU
         inputs = [e.to(self.device) for e in ex[:7]]
-        target_s = ex[7].to(self.device) #text
-        target_e = ex[8].to(self.device) #span
+        target_s = ex[7].to(self.device) #start index
+        target_e = ex[8].to(self.device) #end index
 
-        # Run forward
-        score_s, score_e = self.network(*inputs)
+        if target_s == 0:
+            y_rank = 0
+        else:
+            y_rank = 1
 
-        # Compute loss and accuracies
-        loss = F.nll_loss(score_s, target_s) + F.nll_loss(score_e, target_e)
+        #TODO: load labels for ranker learning
+        # y_rank = ex[9].to(self.device)
+
+        if self.opt['ranker']:
+            # Run forward
+            score_s, score_e, y_bar_rank = self.network(*inputs)
+            loss_fn = torch.nn.MSELoss(size_average=False)
+            loss_ra = loss_fn(y_bar_rank, y_rank)
+
+            # Compute loss and accuracies
+            loss_re = F.nll_loss(score_s, target_s) + F.nll_loss(score_e, target_e)
+
+            loss = loss_ra + loss_re
+        else:
+            # Run forward
+            score_s, score_e = self.network(*inputs)
+            # Compute loss and accuracies
+            loss = F.nll_loss(score_s, target_s) + F.nll_loss(score_e, target_e)
+
+
         self.train_loss.update(loss.item())
 
         # Clear gradients and run backward
@@ -109,11 +129,15 @@ class DocReaderModel(object):
 
         # Run forward
         with torch.no_grad():
-            score_s, score_e = self.network(*inputs)
+            if self.opt['ranker']:
+                score_s, score_e, y_bar_rank = self.network(*inputs)
+            else:
+                score_s, score_e = self.network(*inputs)
 
         # Transfer to CPU/normal tensors for numpy ops
         score_s = score_s.data.cpu()
         score_e = score_e.data.cpu()
+
 
         # Get argmax text spans
         text = ex[-2]

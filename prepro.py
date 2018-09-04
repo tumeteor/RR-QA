@@ -167,11 +167,11 @@ def setup():
     parser = argparse.ArgumentParser(
         description='Preprocessing data files, about 10 minitues to run.'
     )
-    parser.add_argument('--trn_file', default='HBCP/effect/train.effect.json',
+    parser.add_argument('--trn_file', default='HBCP/effect-all/train.effect.json',
                         help='path to train file.')
-    parser.add_argument('--dev_file', default='HBCP/effect/dev.effect.json',
+    parser.add_argument('--dev_file', default='HBCP/effect-all/dev.effect.json',
                         help='path to dev file.')
-    parser.add_argument('--test_file', default='HBCP/effect/dev.effect.json',
+    parser.add_argument('--test_file', default='HBCP/effect-all/dev.effect.json',
                         help='path to dev file.')
     parser.add_argument('--wv_file', default='glove/glove.840B.300d.txt',
                         help='path to word vector file.')

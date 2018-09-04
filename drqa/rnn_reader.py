@@ -150,7 +150,18 @@ class RnnDocReader(nn.Module):
             q_merge_weights = self.self_attn(question_hiddens, x2_mask)
         question_hidden = layers.weighted_avg(question_hiddens, q_merge_weights)
 
+        if self.opt['ranker']:
+            # Ranker
+            input_pair = torch.cat((doc_hiddens, question_hidden), 0)
+            ranker = torch.nn.Sequential(
+            torch.nn.Linear(input_pair, 100),
+            torch.nn.ReLU(),
+            torch.nn.Linear(100, 1),
+        )
+
+
+
         # Predict start and end positions
         start_scores = self.start_attn(doc_hiddens, question_hidden, x1_mask)
         end_scores = self.end_attn(doc_hiddens, question_hidden, x1_mask)
-        return start_scores, end_scores
+        return start_scores, end_scores, ranker if self.opt['ranker'] else start_scores, end_scores
