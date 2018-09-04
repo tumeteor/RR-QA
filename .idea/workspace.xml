@@ -2,12 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c217646a-6a4b-4110-b286-8eeb78359e33" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/drqa/model.py" afterPath="$PROJECT_DIR$/drqa/model.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/drqa/rnn_reader.py" afterPath="$PROJECT_DIR$/drqa/rnn_reader.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/interact.py" afterPath="$PROJECT_DIR$/interact.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/prepro.py" afterPath="$PROJECT_DIR$/prepro.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/train.py" afterPath="$PROJECT_DIR$/train.py" />
     </list>
     <ignored path="DrQA.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -28,20 +23,20 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="prepro.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="prepro.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/prepro.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2175">
-              <caret line="173" column="63" selection-start-line="173" selection-start-column="63" selection-end-line="173" selection-end-column="63" />
+            <state relative-caret-position="331">
+              <caret line="173" column="79" selection-start-line="173" selection-start-column="79" selection-end-line="173" selection-end-column="79" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
-                <marker date="1536099345000" expanded="true" signature="2603:5612" ph="..." />
+                <marker date="1536099856000" expanded="true" signature="2603:5612" ph="..." />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="model.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="model.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/drqa/model.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="226">
@@ -152,9 +147,9 @@
         <option value="$PROJECT_DIR$/drqa/layers.py" />
         <option value="$PROJECT_DIR$/interact.py" />
         <option value="$PROJECT_DIR$/drqa/rnn_reader.py" />
-        <option value="$PROJECT_DIR$/prepro.py" />
         <option value="$PROJECT_DIR$/train.py" />
         <option value="$PROJECT_DIR$/drqa/model.py" />
+        <option value="$PROJECT_DIR$/prepro.py" />
       </list>
     </option>
   </component>
@@ -586,7 +581,7 @@
           <caret line="280" column="77" selection-start-line="280" selection-start-column="62" selection-end-line="280" selection-end-column="77" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
-            <marker date="1536099345000" expanded="true" signature="2603:5612" ph="..." />
+            <marker date="1536099856000" expanded="true" signature="2603:5612" ph="..." />
           </folding>
         </state>
       </provider>
@@ -668,7 +663,7 @@
           <caret line="280" column="77" selection-start-line="280" selection-start-column="62" selection-end-line="280" selection-end-column="77" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
-            <marker date="1536099345000" expanded="true" signature="2603:5612" ph="..." />
+            <marker date="1536099856000" expanded="true" signature="2603:5612" ph="..." />
           </folding>
         </state>
       </provider>
@@ -750,7 +745,7 @@
           <caret line="223" column="41" selection-start-line="223" selection-start-column="36" selection-end-line="223" selection-end-column="41" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
-            <marker date="1536099345000" expanded="true" signature="2603:5612" ph="..." />
+            <marker date="1536099856000" expanded="true" signature="2603:5612" ph="..." />
           </folding>
         </state>
       </provider>
@@ -943,17 +938,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/prepro.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2175">
-          <caret line="173" column="63" selection-start-line="173" selection-start-column="63" selection-end-line="173" selection-end-column="63" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
-            <marker date="1536099345000" expanded="true" signature="2603:5612" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/train.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="185">
@@ -970,6 +954,17 @@
           <caret line="81" column="47" selection-start-line="81" selection-start-column="47" selection-end-line="81" selection-end-column="47" />
           <folding>
             <element signature="e#293#306#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/prepro.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="331">
+          <caret line="173" column="79" selection-start-line="173" selection-start-column="79" selection-end-line="173" selection-end-column="79" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+            <marker date="1536099856000" expanded="true" signature="2603:5612" ph="..." />
           </folding>
         </state>
       </provider>
