@@ -56,18 +56,7 @@ def main():
         model = DocReaderModel(opt, embedding)
         epoch_0 = 1
         best_val_score = 0.0
-    # SET RANKING MODE 
-    candidateMode = True
-    if (candidateMode):
-        with open("HBCP/effect-all/dev.effect.dict.pkl", "rb") as f:
-            cqDict = pickle.load(f)
-        cDict = {}
-        for i in range(0, len(predictions)):
-            qid = cqDict[i]
-            if qid in cDict:
-                cDict[qid].append(i)
-            else:
-                cDict[qid] = [i]
+
 
     for epoch in range(epoch_0, epoch_0 + args.epochs):
         log.warning('Epoch {}'.format(epoch))
@@ -85,6 +74,8 @@ def main():
         batches = BatchGen(dev, batch_size=args.batch_size, evaluation=True, gpu=args.cuda)
 
         predictions = []
+        # SET RANKING MODE
+        candidateMode = True
         if (candidateMode):
             scores = []
 
@@ -94,8 +85,18 @@ def main():
                 scores.extend(s)
                 log.debug('> evaluating [{}/{}]'.format(i, len(batches)))
 
-            predictions, actualAns, actualScores =  rankScore(cqDict, predictions=predictions, scores=scores)
-            em, f1 = score(predictions, actualAns)
+            with open("HBCP/effect-all/dev.effect.dict.pkl", "rb") as f:
+                cqDict = pickle.load(f)
+            cDict = {}
+            for i in range(0, len(predictions)):
+                qid = cqDict[i]
+                if qid in cDict:
+                    cDict[qid].append(i)
+                else:
+                    cDict[qid] = [i]
+
+            actualPreds, actualAns, actualScores = rankScore(cqDict, predictions=predictions, scores=scores)
+            em, f1 = score(actualPreds, actualAns)
             log.warning("dev EM: {} F1: {}".format(em, f1))
 
         else:
