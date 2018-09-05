@@ -82,7 +82,7 @@ class DocReaderModel(object):
         #TODO: load labels for ranker learning
         # y_rank = ex[9].to(self.device)
         #print(target_s)
-        if self.opt['ranker'] and y_rank.size(0) == self.opt['batch_size'] :
+        if self.opt['ranker']:
             # Run forward
         
             score_s, score_e, y_bar_rank = self.network(*inputs)
@@ -95,10 +95,6 @@ class DocReaderModel(object):
             loss_re = F.nll_loss(score_s, target_s, ignore_index=-1) + F.nll_loss(score_e, target_e, ignore_index=-1)
 
             loss = loss_ra + loss_re
-        elif self.opt['ranker'] and y_rank.size(0) != self.opt['batch_size']:
-            score_s, score_e, y_bar_rank = self.network(*inputs)
-            #loss = 0.0
-            loss = F.nll_loss(score_s, target_s, ignore_index=-1) + F.nll_loss(score_e, target_e,ignore_index=-1)
         else:
             # Run forward
             score_s, score_e = self.network(*inputs)

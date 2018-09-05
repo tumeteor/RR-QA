@@ -13,6 +13,8 @@ import torch
 import msgpack
 from drqa.model import DocReaderModel
 from drqa.utils import str2bool
+import numpy as np
+import six.moves.cPickle as pickle
 
 
 def main():
@@ -69,19 +71,41 @@ def main():
         log.debug('\n')
         # eval
         batches = BatchGen(dev, batch_size=args.batch_size, evaluation=True, gpu=args.cuda)
+
         predictions = []
-      
-        for i, batch in enumerate(batches):
-            predictions.extend(model.predict(batch))
-            log.debug('> evaluating [{}/{}]'.format(i, len(batches)))
-        em, f1 = score(predictions, dev_y)
-        log.warning("dev EM: {} F1: {}".format(em, f1))
+        candidateMode = True
+        if (candidateMode):
+            scores = []
+            with open("HBCP/effect/test.effect.dict.pkl", "rb") as f:
+                cqDict = pickle.load(f)
+
+            for i, batch in enumerate(batches):
+                p, s = model.predict(batch)
+                predictions.extend(p)
+                scores.extend(s)
+                log.debug('> evaluating [{}/{}]'.format(i, len(batches)))
+
+            predictions, actualAns, actualScores =  rankScore(cqDict, predictions=predictions, scores=scores)
+            em, f1 = score(predictions, actualAns)
+            log.warning("dev EM: {} F1: {}".format(em, f1))
+
+
+
+
+        else:
+            for i, batch in enumerate(batches):
+                p = model.predict(batch)
+                predictions.extend(p)
+                log.debug('> evaluating [{}/{}]'.format(i, len(batches)))
+
+            em, f1 = score(predictions, dev_y)
+            log.warning("dev EM: {} F1: {}".format(em, f1))
         # save
         if not args.save_last_only or epoch == epoch_0 + args.epochs - 1:
             model_file = os.path.join(args.model_dir, 'checkpoint_epoch_{}.pt'.format(epoch))
             model.save(model_file, epoch, [em, f1, best_val_score])
-            if f1 > best_val_score:
-                best_val_score = f1
+            if em > best_val_score:
+                best_val_score = em
                 copyfile(
                     model_file,
                     os.path.join(args.model_dir, 'best_model.pt'))
@@ -482,6 +506,26 @@ def score(pred, truth, evaluation=False):
     return pre, f1
 
 
+
+def rankScore(cDict, predictions, scores):
+    actualPredictions = []
+    actualAns = []
+    actualScores = []
+    for qid in cDict:
+        # group by att + docid
+        # and get the prediction with max score
+        cList = np.array(cDict[qid])
+        pScores = [scores[idx] for idx in cList]
+        # bestIdx = cList[pScores.index(max(pScores))]
+        # fixed! get relative indices from pScores -> get actual from cList
+        bestIdx = [cList[idx] for idx in np.array(pScores).argsort()[-1:][::-1]]
+        bestP = [predictions[idx] for idx in bestIdx]
+        bestS = [scores[idx] for idx in bestIdx]
+        ans = qid.split("\t")[-1]
+        actualPredictions.append(bestP)
+        actualAns.append(ans)
+        actualScores.append(bestS)
+    return actualPredictions, actualAns, actualScores
 if __name__ == '__main__':
     main()
 
