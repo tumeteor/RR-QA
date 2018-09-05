@@ -41,11 +41,7 @@ def main():
             lr_decay(model.optimizer, lr_decay=args.reduce_lr)
             log.info('[learning rate reduced by {}]'.format(args.reduce_lr))
         batches = BatchGen(dev, batch_size=args.batch_size, evaluation=True, gpu=args.cuda)
-        predictions = []
-        for i, batch in enumerate(batches):
-            predictions.extend(model.predict(batch))
-            log.debug('> evaluating [{}/{}]'.format(i, len(batches)))
-        em, f1 = score(predictions, dev_y)
+        em, f1 = infer(batches=batches, model=model, log=log, candidateMode=True, dev_y=dev_y)
         log.info("[dev EM: {} F1: {}]".format(em, f1))
         if math.fabs(em - checkpoint['em']) > 1e-3 or math.fabs(f1 - checkpoint['f1']) > 1e-3:
             log.info('Inconsistent: recorded EM: {} F1: {}'.format(checkpoint['em'], checkpoint['f1']))
@@ -74,39 +70,7 @@ def main():
         batches = BatchGen(dev, batch_size=args.batch_size, evaluation=True, gpu=args.cuda)
 
         predictions = []
-        # SET RANKING MODE
-        candidateMode = True
-        if (candidateMode):
-            scores = []
-
-            for i, batch in enumerate(batches):
-                p, s = model.predict(batch)
-                predictions.extend(p)
-                scores.extend(s)
-                log.debug('> evaluating [{}/{}]'.format(i, len(batches)))
-
-            with open("HBCP/effect-all/dev.effect.dict.pkl", "rb") as f:
-                cqDict = pickle.load(f)
-            cDict = {}
-            for i in range(0, len(predictions)):
-                qid = cqDict[i]
-                if qid in cDict:
-                    cDict[qid].append(i)
-                else:
-                    cDict[qid] = [i]
-
-            actualPreds, actualAns, actualScores = rankScore(cDict, predictions=predictions, scores=scores)
-            em, f1 = score(actualAns, actualPreds)
-            log.warning("dev EM: {} F1: {}".format(em, f1))
-
-        else:
-            for i, batch in enumerate(batches):
-                p = model.predict(batch)
-                predictions.extend(p)
-                log.debug('> evaluating [{}/{}]'.format(i, len(batches)))
-
-            em, f1 = score(predictions, dev_y)
-            log.warning("dev EM: {} F1: {}".format(em, f1))
+        em, f1 = infer(batches=batches, model=model, log=log, candidateMode=True, dev_y=dev_y)
         # save
         if not args.save_last_only or epoch == epoch_0 + args.epochs - 1:
             model_file = os.path.join(args.model_dir, 'checkpoint_epoch_{}.pt'.format(epoch))
@@ -253,6 +217,43 @@ def load_data(opt):
     dev_y = [x[-1] for x in data['dev']]
     return train, dev, dev_y, embedding, opt
 
+
+def infer(batches, model, log, candidateMode=True, dev_y=None):
+    predictions = []
+    # SET RANKING MODE
+    if (candidateMode):
+        scores = []
+
+        for i, batch in enumerate(batches):
+            p, s = model.predict(batch)
+            predictions.extend(p)
+            scores.extend(s)
+            log.debug('> evaluating [{}/{}]'.format(i, len(batches)))
+
+        with open("HBCP/effect-all/dev.effect.dict.pkl", "rb") as f:
+            cqDict = pickle.load(f)
+        cDict = {}
+        for i in range(0, len(predictions)):
+            qid = cqDict[i]
+            if qid in cDict:
+                cDict[qid].append(i)
+            else:
+                cDict[qid] = [i]
+
+        actualPreds, actualAns, actualScores = rankScore(cDict, predictions=predictions, scores=scores)
+        em, f1 = score(actualAns, actualPreds)
+        log.warning("dev EM: {} F1: {}".format(em, f1))
+
+    else:
+        for i, batch in enumerate(batches):
+            p = model.predict(batch)
+            predictions.extend(p)
+            log.debug('> evaluating [{}/{}]'.format(i, len(batches)))
+
+        em, f1 = score(predictions, dev_y)
+        log.warning("dev EM: {} F1: {}".format(em, f1))
+
+    return em, f1
 
 class BatchGen:
     pos_size = None

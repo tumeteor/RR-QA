@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c217646a-6a4b-4110-b286-8eeb78359e33" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/drqa/model.py" afterPath="$PROJECT_DIR$/drqa/model.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/train.py" afterPath="$PROJECT_DIR$/train.py" />
     </list>
     <ignored path="DrQA.iws" />
@@ -37,11 +36,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="model.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="model.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/drqa/model.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="481">
-              <caret line="163" column="31" selection-start-line="163" selection-start-column="31" selection-end-line="163" selection-end-column="31" />
+            <state relative-caret-position="2220">
+              <caret line="177" column="74" selection-start-line="177" selection-start-column="73" selection-end-line="177" selection-end-column="74" />
               <folding>
                 <element signature="e#293#306#0" expanded="true" />
               </folding>
@@ -113,11 +112,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="train.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="train.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/train.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="4861">
-              <caret line="396" column="19" selection-start-line="396" selection-start-column="16" selection-end-line="396" selection-end-column="19" />
+            <state relative-caret-position="390">
+              <caret line="43" column="93" selection-start-line="43" selection-start-column="88" selection-end-line="43" selection-end-column="93" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
               </folding>
@@ -149,8 +148,8 @@
         <option value="$PROJECT_DIR$/interact.py" />
         <option value="$PROJECT_DIR$/prepro.py" />
         <option value="$PROJECT_DIR$/drqa/rnn_reader.py" />
-        <option value="$PROJECT_DIR$/train.py" />
         <option value="$PROJECT_DIR$/drqa/model.py" />
+        <option value="$PROJECT_DIR$/train.py" />
       </list>
     </option>
   </component>
@@ -950,22 +949,22 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/train.py">
+    <entry file="file://$PROJECT_DIR$/drqa/model.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4861">
-          <caret line="396" column="19" selection-start-line="396" selection-start-column="16" selection-end-line="396" selection-end-column="19" />
+        <state relative-caret-position="2220">
+          <caret line="177" column="74" selection-start-line="177" selection-start-column="73" selection-end-line="177" selection-end-column="74" />
           <folding>
-            <element signature="e#0#9#0" expanded="true" />
+            <element signature="e#293#306#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/drqa/model.py">
+    <entry file="file://$PROJECT_DIR$/train.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="481">
-          <caret line="163" column="31" selection-start-line="163" selection-start-column="31" selection-end-line="163" selection-end-column="31" />
+        <state relative-caret-position="390">
+          <caret line="43" column="93" selection-start-line="43" selection-start-column="88" selection-end-line="43" selection-end-column="93" />
           <folding>
-            <element signature="e#293#306#0" expanded="true" />
+            <element signature="e#0#9#0" expanded="true" />
           </folding>
         </state>
       </provider>
