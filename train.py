@@ -95,8 +95,8 @@ def main():
                 else:
                     cDict[qid] = [i]
 
-            actualPreds, actualAns, actualScores = rankScore(cqDict, predictions=predictions, scores=scores)
-            em, f1 = score(actualPreds, actualAns)
+            actualPreds, actualAns, actualScores = rankScore(cDict, predictions=predictions, scores=scores)
+            em, f1 = score(actualAns, actualPreds)
             log.warning("dev EM: {} F1: {}".format(em, f1))
 
         else:
