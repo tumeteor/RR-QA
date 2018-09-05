@@ -149,19 +149,30 @@ class RnnDocReader(nn.Module):
         elif self.opt['question_merge'] == 'self_attn':
             q_merge_weights = self.self_attn(question_hiddens, x2_mask)
         question_hidden = layers.weighted_avg(question_hiddens, q_merge_weights)
-
+        #print("doc_h: {}".format(doc_hiddens.size()))
+        #print("q_h: {}".format(question_hiddens.size()))
         if self.opt['ranker']:
             # Ranker
-            input_pair = torch.cat((doc_hiddens, question_hidden), 0)
+            # doc_hiddens_flatten = doc_hiddens.contiguous().view(doc_hiddens.numel())
+            # question_hidden_flatten = question_hidden.contiguous().view(question_hidden.numel())
+            
+            input_pair = torch.cat((doc_hiddens, question_hiddens), 1)
+            input_pair = input_pair.view(input_pair.size(0), -1)
+            #print("input shape: {}".format(input_pair.size()))
+            
+            input_pair = input_pair.cuda()        
             ranker = torch.nn.Sequential(
-            torch.nn.Linear(input_pair, 100),
+            torch.nn.Linear(input_pair.size(1), 100),
             torch.nn.ReLU(),
             torch.nn.Linear(100, 1),
-        )
+            ).cuda()
 
-
+            rank_score = ranker(input_pair)
+       
 
         # Predict start and end positions
         start_scores = self.start_attn(doc_hiddens, question_hidden, x1_mask)
         end_scores = self.end_attn(doc_hiddens, question_hidden, x1_mask)
-        return start_scores, end_scores, ranker if self.opt['ranker'] else start_scores, end_scores
+        print(start_scores.size())
+        print("rank scores: {}".format(rank_score.size()))
+        return start_scores, end_scores, rank_score

@@ -85,7 +85,8 @@ def main():
         dev = list(tqdm(p.imap(annotate_, dev, chunksize=args.batch_size), total=len(dev), desc='dev  '))
     train = list(map(index_answer, train))
     initial_len = len(train)
-    train = list(filter(lambda x: x[-1] is not None, train))
+    # don't do filter in ranking case
+    #train = list(filter(lambda x: x[-1] is not None, train))
     log.info('drop {} inconsistent samples.'.format(initial_len - len(train)))
     log.info('tokens generated')
 
@@ -142,7 +143,7 @@ def main():
         'embedding': embeddings.tolist(),
         'wv_cased': args.wv_cased,
     }
-    with open('HBCP/effect/meta.msgpack', 'wb') as f:
+    with open('HBCP/effect-all/meta.msgpack', 'wb') as f:
         msgpack.dump(meta, f)
     result = {
         'train': train,
@@ -152,14 +153,14 @@ def main():
     #        question_id, context, context_token_span, answer_start, answer_end
     # dev:   id, context_id, context_features, tag_id, ent_id,
     #        question_id, context, context_token_span, answer
-    with open('HBCP/effect/data.msgpack', 'wb') as f:
+    with open('HBCP/effect-all/data.msgpack', 'wb') as f:
         msgpack.dump(result, f)
     if args.sample_size:
         sample = {
             'train': train[:args.sample_size],
             'dev': dev[:args.sample_size]
         }
-        with open('HBCP/effect/sample.msgpack', 'wb') as f:
+        with open('HBCP/effect-all/sample.msgpack', 'wb') as f:
             msgpack.dump(sample, f)
     log.info('saved to disk.')
 
@@ -331,7 +332,7 @@ def index_answer(row):
     try:
         return row[:-3] + (starts.index(answer_start), ends.index(answer_end))
     except ValueError:
-        return row[:-3] + (None, None)
+        return row[:-3] + (-1, -1)
 
 
 def build_vocab(questions, contexts, wv_vocab, sort_all=False):

@@ -77,31 +77,40 @@ class DocReaderModel(object):
         target_e = ex[8].to(self.device) #end index
         # is target_s = -1 (no ans) then the label of sentence
         # y_rank = 0 else y_rank = 1 (has answer)
-        y_rank = torch.tensor([0 if x.item() == -1 else 1 for x in target_s])
+        y_rank = Variable(torch.FloatTensor([[0.0] if x.item() == -1 else [1.0] for x in target_s]))
+        y_rank = y_rank.to(self.device)
         #TODO: load labels for ranker learning
         # y_rank = ex[9].to(self.device)
-
-        if self.opt['ranker']:
+        #print(target_s)
+        if self.opt['ranker'] and y_rank.size(0) == self.opt['batch_size'] :
             # Run forward
+        
             score_s, score_e, y_bar_rank = self.network(*inputs)
             loss_fn = torch.nn.MSELoss(size_average=False)
+            #print(y_bar_rank.size())
+            #print(y_rank.size())
             loss_ra = loss_fn(y_bar_rank, y_rank)
 
             # Compute loss and accuracies
-            loss_re = F.nll_loss(score_s, target_s) + F.nll_loss(score_e, target_e)
+            loss_re = F.nll_loss(score_s, target_s, ignore_index=-1) + F.nll_loss(score_e, target_e, ignore_index=-1)
 
             loss = loss_ra + loss_re
+        elif self.opt['ranker'] and y_rank.size(0) != self.opt['batch_size']:
+            score_s, score_e, y_bar_rank = self.network(*inputs)
+            #loss = 0.0
+            loss = F.nll_loss(score_s, target_s, ignore_index=-1) + F.nll_loss(score_e, target_e,ignore_index=-1)
         else:
             # Run forward
             score_s, score_e = self.network(*inputs)
             # Compute loss and accuracies
             loss = F.nll_loss(score_s, target_s) + F.nll_loss(score_e, target_e)
 
-
+        
         self.train_loss.update(loss.item())
 
         # Clear gradients and run backward
         self.optimizer.zero_grad()
+        
         loss.backward()
 
         # Clip gradients
