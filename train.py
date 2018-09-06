@@ -69,7 +69,6 @@ def main():
         # eval
         batches = BatchGen(dev, batch_size=args.batch_size, evaluation=True, gpu=args.cuda)
 
-        predictions = []
         em, f1 = infer(batches=batches, model=model, log=log, candidateMode=True, dev_y=dev_y)
         # save
         if not args.save_last_only or epoch == epoch_0 + args.epochs - 1:
@@ -92,7 +91,7 @@ def setup():
                         help='log model loss per x updates (mini-batches).')
     parser.add_argument('--data_file', default='HBCP/effect-all/data.msgpack',
                         help='path to preprocessed data file.')
-    parser.add_argument('--model_dir', default='models/HBCP-all/effect',
+    parser.add_argument('--model_dir', default='models/HBCP/effect-all',
                         help='path to store saved models.')
     parser.add_argument('--save_last_only', action='store_true',
                         help='only save the final models.')
@@ -534,6 +533,7 @@ def rankScore(cDict, predictions, scores):
         actualAns.append(ans)
         actualScores.append(bestS)
     return actualPredictions, actualAns, actualScores
+
 if __name__ == '__main__':
     main()
 
