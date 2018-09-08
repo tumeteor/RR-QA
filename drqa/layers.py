@@ -250,6 +250,7 @@ class FullyNN(nn.Module):
             torch.nn.Linear(100, 1),
         )
     def forward(self, x):
+        x = x.view(x.size(0), -1)
         score = F.sigmoid(self.linear(x))
         return score
 

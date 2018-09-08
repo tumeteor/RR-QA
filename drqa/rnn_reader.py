@@ -161,10 +161,9 @@ class RnnDocReader(nn.Module):
             # question_hidden_flatten = question_hidden.contiguous().view(question_hidden.numel())
             
             input_pair = torch.cat((doc_hiddens, question_hiddens), 1)
-            input_pair = input_pair.view(input_pair.size(0), -1)
+
             print("input shape: {}".format(input_pair.size()))
-            
-            input_pair = input_pair.cuda()
+            #input_pair = input_pair.cuda()
             # Apply dropout to input
             if self.opt['dropout_nn'] > 0:
                 input_pair = F.dropout(input_pair.data,
