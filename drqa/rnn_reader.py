@@ -5,6 +5,7 @@
 # of patent rights can be found in the PATENTS file in the same directory.
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 from . import layers
 
 # Modification:
@@ -160,14 +161,15 @@ class RnnDocReader(nn.Module):
             input_pair = input_pair.view(input_pair.size(0), -1)
             #print("input shape: {}".format(input_pair.size()))
             
-            input_pair = input_pair.cuda()        
-            ranker = torch.nn.Sequential(
-            torch.nn.Linear(input_pair.size(1), 100),
-            torch.nn.ReLU(),
-            torch.nn.Linear(100, 1),
-            ).cuda()
+            input_pair = input_pair.cuda()
+            # Apply dropout to input
+            if self.opt['dropout_nn'] > 0:
+                input_pair = F.dropout(input_pair.data,
+                                          p=self.opt['dropout_nn'],
+                                          training=self.training)
 
-            rank_score = ranker(input_pair)
+
+            rank_score = layers.FullyNN(input_pair)
        
 
         # Predict start and end positions

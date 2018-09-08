@@ -241,6 +241,17 @@ class LinearSeqAttn(nn.Module):
         alpha = F.softmax(scores, dim=1)
         return alpha
 
+class FullyNN(nn.Module):
+    def __init__(self, input):
+        super(FullyNN, self).__init__()
+        self.linear = torch.nn.Sequential(
+            torch.nn.Linear(input.size(1), 100),
+            torch.nn.ReLU(),
+            torch.nn.Linear(100, 1),
+        )
+    def forward(self, x):
+        score = F.sigmoid(self.linear(x))
+        return score
 
 # ------------------------------------------------------------------------------
 # Functional

@@ -139,6 +139,7 @@ def setup():
                         const=True, default=True)
     parser.add_argument('--dropout_emb', type=float, default=0.4)
     parser.add_argument('--dropout_rnn', type=float, default=0.4)
+    parser.add_argument('--dropout_nn', type=float, default=0.4)
     parser.add_argument('--dropout_rnn_output', type=str2bool, nargs='?',
                         const=True, default=True)
     parser.add_argument('--max_len', type=int, default=15)
@@ -245,7 +246,7 @@ def infer(batches, model, log, candidateMode=True, dev_y=None):
 
     else:
         for i, batch in enumerate(batches):
-            p = model.predict(batch)
+            p, s = model.predict(batch)
             predictions.extend(p)
             log.debug('> evaluating [{}/{}]'.format(i, len(batches)))
 

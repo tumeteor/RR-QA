@@ -20,7 +20,7 @@ To change this script to batch model, simply modify line 70 from "BatchGen([mode
 parser = argparse.ArgumentParser(
     description='Interact with document reader model.'
 )
-parser.add_argument('--model-file', default='models/HBCP/effect/best_model.pt',
+parser.add_argument('--model-file', default='models/HBCP/effect-all/best_model.pt',
                     help='path to model file')
 parser.add_argument("--cuda", type=str2bool, nargs='?',
                     const=True, default=torch.cuda.is_available(),
@@ -57,7 +57,7 @@ else:
 
 state_dict = checkpoint['state_dict']
 opt = checkpoint['config']
-with open('HBCP/effect/meta.msgpack', 'rb') as f:
+with open('HBCP/effect-all/meta.msgpack', 'rb') as f:
     meta = msgpack.load(f, encoding='utf8')
 embedding = torch.Tensor(meta['embedding'])
 opt['pretrained_words'] = True
@@ -131,7 +131,7 @@ if (args.batch):
 
         for att in attPreDict:
             print("att: {}".format(att))
-            score(attPreDict[att], attAnsDict[att], evaluation=True)
+            score(attAnsDict[att], attPreDict[att], evaluation=True)
             print("test size: {}".format(len(attAnsDict[att])))
 
 
