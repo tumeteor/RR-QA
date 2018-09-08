@@ -242,10 +242,10 @@ class LinearSeqAttn(nn.Module):
         return alpha
 
 class FullyNN(nn.Module):
-    def __init__(self, input):
+    def __init__(self, input_size):
         super(FullyNN, self).__init__()
         self.linear = torch.nn.Sequential(
-            torch.nn.Linear(input.size(1), 100),
+            torch.nn.Linear(input_size, 100),
             torch.nn.ReLU(),
             torch.nn.Linear(100, 1),
         )

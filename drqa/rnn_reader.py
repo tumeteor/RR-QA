@@ -95,6 +95,9 @@ class RnnDocReader(nn.Module):
         if opt['question_merge'] == 'self_attn':
             self.self_attn = layers.LinearSeqAttn(question_hidden_size)
 
+        if self.opt['ranker']:
+            self.fullyNN = layers.FullyNN(100)
+
         # Bilinear attention for span start/end
         self.start_attn = layers.BilinearSeqAttn(
             doc_hidden_size,
@@ -159,7 +162,7 @@ class RnnDocReader(nn.Module):
             
             input_pair = torch.cat((doc_hiddens, question_hiddens), 1)
             input_pair = input_pair.view(input_pair.size(0), -1)
-            #print("input shape: {}".format(input_pair.size()))
+            print("input shape: {}".format(input_pair.size()))
             
             input_pair = input_pair.cuda()
             # Apply dropout to input
@@ -169,8 +172,7 @@ class RnnDocReader(nn.Module):
                                           training=self.training)
 
 
-            fullyNN = layers.FullyNN(input_pair)
-            rank_score = fullyNN(input_pair)
+            rank_score = self.fullyNN(input_pair)
        
 
         # Predict start and end positions
