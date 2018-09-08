@@ -169,7 +169,8 @@ class RnnDocReader(nn.Module):
                                           training=self.training)
 
 
-            rank_score = layers.FullyNN(input_pair)
+            fullyNN = layers.FullyNN(input_pair)
+            rank_score = fullyNN(input_pair)
        
 
         # Predict start and end positions
