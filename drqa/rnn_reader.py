@@ -95,7 +95,7 @@ class RnnDocReader(nn.Module):
         if opt['question_merge'] == 'self_attn':
             self.self_attn = layers.LinearSeqAttn(question_hidden_size)
 
-        if self.opt['ranker']:
+        if opt['ranker']:
             self.fullyNN = layers.FullyNN(100)
 
         # Bilinear attention for span start/end

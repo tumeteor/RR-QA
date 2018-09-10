@@ -71,6 +71,8 @@ def prepare_test_cand(vocab, vocab_tag, vocab_ent, wv_cased, args):
     return test_x, test_y
 
 
+
+
 def main():
     args, log = setup()
 

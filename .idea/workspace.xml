@@ -2,8 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c217646a-6a4b-4110-b286-8eeb78359e33" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/drqa/layers.py" afterPath="$PROJECT_DIR$/drqa/layers.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Baseline/__init__.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Baseline/crf.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/drqa/rnn_reader.py" afterPath="$PROJECT_DIR$/drqa/rnn_reader.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/prepro.py" afterPath="$PROJECT_DIR$/prepro.py" />
     </list>
     <ignored path="DrQA.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -27,8 +30,8 @@
       <file leaf-file-name="prepro.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/prepro.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="4950">
-              <caret line="334" column="29" selection-start-line="334" selection-start-column="29" selection-end-line="334" selection-end-column="29" />
+            <state relative-caret-position="428">
+              <caret line="222" column="27" selection-start-line="222" selection-start-column="20" selection-end-line="222" selection-end-column="27" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
               </folding>
@@ -60,11 +63,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="rnn_reader.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="rnn_reader.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/drqa/rnn_reader.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="260">
-              <caret line="164" column="62" selection-start-line="164" selection-start-column="62" selection-end-line="164" selection-end-column="62" />
+            <state relative-caret-position="-787">
+              <caret line="97" column="11" selection-start-line="97" selection-start-column="11" selection-end-line="97" selection-end-column="11" />
               <folding>
                 <element signature="e#293#305#0" expanded="true" />
               </folding>
@@ -72,10 +75,32 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="crf.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Baseline/crf.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="173">
+              <caret line="35" column="9" selection-start-line="0" selection-start-column="0" selection-end-line="178" selection-end-column="33" />
+              <folding>
+                <element signature="e#0#61#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="FullTree.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/TreeQA/FullTree.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-1545">
+              <caret line="124" column="25" selection-start-line="124" selection-start-column="20" selection-end-line="124" selection-end-column="25" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="interact.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/interact.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1168">
+            <state relative-caret-position="720">
               <caret line="59" column="26" selection-start-line="59" selection-start-column="26" selection-end-line="59" selection-end-column="26" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
@@ -94,18 +119,6 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="tree_rnn_reader.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/drqa/tree_rnn_reader.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="225">
-              <caret line="18" column="44" selection-start-line="18" selection-start-column="23" selection-end-line="18" selection-end-column="44" />
-              <folding>
-                <element signature="e#293#305#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="Tree.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/TreeQA/Tree.py">
           <provider selected="true" editor-type-id="text-editor">
@@ -119,8 +132,8 @@
       <file leaf-file-name="train.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/train.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="186">
-              <caret line="205" column="17" selection-start-line="205" selection-start-column="15" selection-end-line="205" selection-end-column="17" />
+            <state relative-caret-position="75">
+              <caret line="22" column="9" selection-start-line="22" selection-start-column="4" selection-end-line="22" selection-end-column="9" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
               </folding>
@@ -148,12 +161,13 @@
         <option value="$PROJECT_DIR$/TreeQA/FullTree.py" />
         <option value="$PROJECT_DIR$/drqa/tree_rnn_reader.py" />
         <option value="$PROJECT_DIR$/prepro-sst.py" />
-        <option value="$PROJECT_DIR$/prepro.py" />
         <option value="$PROJECT_DIR$/drqa/model.py" />
         <option value="$PROJECT_DIR$/train.py" />
         <option value="$PROJECT_DIR$/interact.py" />
         <option value="$PROJECT_DIR$/drqa/layers.py" />
+        <option value="$PROJECT_DIR$/prepro.py" />
         <option value="$PROJECT_DIR$/drqa/rnn_reader.py" />
+        <option value="$PROJECT_DIR$/Baseline/crf.py" />
       </list>
     </option>
   </component>
@@ -166,7 +180,7 @@
   <component name="ProjectFrameBounds">
     <option name="y" value="23" />
     <option name="width" value="1280" />
-    <option name="height" value="734" />
+    <option name="height" value="740" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -193,8 +207,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -241,8 +253,24 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DrQA" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DrQA" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Baseline" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -475,10 +503,10 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1280" height="734" extended-state="6" />
+    <frame x="0" y="23" width="1280" height="740" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.28594506" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2907916" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -516,16 +544,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/drqa/model.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="495">
-          <caret line="42" column="20" selection-start-line="42" selection-start-column="13" selection-end-line="42" selection-end-column="20" />
-          <folding>
-            <element signature="e#293#306#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/drqa/rnn_reader.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="885">
@@ -541,7 +559,7 @@
         <state relative-caret-position="225">
           <caret line="18" column="44" selection-start-line="18" selection-start-column="23" selection-end-line="18" selection-end-column="44" />
           <folding>
-            <element signature="e#293#305#0" expanded="true" />
+            <element signature="e#293#305#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -585,7 +603,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1500">
           <caret line="100" column="19" selection-start-line="100" selection-start-column="13" selection-end-line="100" selection-end-column="19" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -621,7 +638,7 @@
         <state relative-caret-position="225">
           <caret line="18" column="44" selection-start-line="18" selection-start-column="23" selection-end-line="18" selection-end-column="44" />
           <folding>
-            <element signature="e#293#305#0" expanded="true" />
+            <element signature="e#293#305#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -665,7 +682,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1500">
           <caret line="100" column="19" selection-start-line="100" selection-start-column="13" selection-end-line="100" selection-end-column="19" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -701,7 +717,7 @@
         <state relative-caret-position="225">
           <caret line="18" column="44" selection-start-line="18" selection-start-column="23" selection-end-line="18" selection-end-column="44" />
           <folding>
-            <element signature="e#293#305#0" expanded="true" />
+            <element signature="e#293#305#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -745,7 +761,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1500">
           <caret line="100" column="19" selection-start-line="100" selection-start-column="13" selection-end-line="100" selection-end-column="19" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -781,7 +796,7 @@
         <state relative-caret-position="2235">
           <caret line="152" column="6" selection-start-line="152" selection-start-column="6" selection-end-line="152" selection-end-column="6" />
           <folding>
-            <element signature="e#293#305#0" expanded="true" />
+            <element signature="e#293#305#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -829,7 +844,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1500">
           <caret line="100" column="19" selection-start-line="100" selection-start-column="13" selection-end-line="100" selection-end-column="19" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -837,13 +851,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2310">
           <caret line="165" column="36" selection-start-line="165" selection-start-column="36" selection-end-line="165" selection-end-column="36" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/TreeQA/FullTree.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1815">
-          <caret line="124" column="25" selection-start-line="124" selection-start-column="20" selection-end-line="124" selection-end-column="25" />
         </state>
       </provider>
     </entry>
@@ -866,7 +873,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -875,7 +881,7 @@
         <state relative-caret-position="225">
           <caret line="18" column="44" selection-start-line="18" selection-start-column="23" selection-end-line="18" selection-end-column="44" />
           <folding>
-            <element signature="e#293#305#0" expanded="true" />
+            <element signature="e#293#305#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -904,42 +910,50 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/interact.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="720">
+          <caret line="59" column="26" selection-start-line="59" selection-start-column="26" selection-end-line="59" selection-end-column="26" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TreeQA/FullTree.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1545">
+          <caret line="124" column="25" selection-start-line="124" selection-start-column="20" selection-end-line="124" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/train.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="22" column="9" selection-start-line="22" selection-start-column="4" selection-end-line="22" selection-end-column="9" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/drqa/rnn_reader.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-787">
+          <caret line="97" column="11" selection-start-line="97" selection-start-column="11" selection-end-line="97" selection-end-column="11" />
+          <folding>
+            <element signature="e#293#305#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/drqa/model.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="186">
           <caret line="174" column="32" selection-start-line="174" selection-start-column="30" selection-end-line="174" selection-end-column="32" />
           <folding>
             <element signature="e#293#306#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/train.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="186">
-          <caret line="205" column="17" selection-start-line="205" selection-start-column="15" selection-end-line="205" selection-end-column="17" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/prepro.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4950">
-          <caret line="334" column="29" selection-start-line="334" selection-start-column="29" selection-end-line="334" selection-end-column="29" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/interact.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1168">
-          <caret line="59" column="26" selection-start-line="59" selection-start-column="26" selection-end-line="59" selection-end-column="26" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -954,12 +968,22 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/drqa/rnn_reader.py">
+    <entry file="file://$PROJECT_DIR$/prepro.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="260">
-          <caret line="164" column="62" selection-start-line="164" selection-start-column="62" selection-end-line="164" selection-end-column="62" />
+        <state relative-caret-position="428">
+          <caret line="222" column="27" selection-start-line="222" selection-start-column="20" selection-end-line="222" selection-end-column="27" />
           <folding>
-            <element signature="e#293#305#0" expanded="true" />
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Baseline/crf.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="173">
+          <caret line="35" column="9" selection-start-line="0" selection-start-column="0" selection-end-line="178" selection-end-column="33" />
+          <folding>
+            <element signature="e#0#61#0" expanded="true" />
           </folding>
         </state>
       </provider>
