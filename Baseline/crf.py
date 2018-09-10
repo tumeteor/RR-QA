@@ -22,8 +22,8 @@ def word2features(doc, i):
         'word.ispercent=%s' %extractPercentage(word),
         'word.isCI=%s' %isCI(word),
         'word.isP=%s' %containPvalue(word),
-        'word.isSigni' %containSignificance(word),
-        'word.isOR' %containOR(word),
+        'word.isSigni=%s' %containSignificance(word),
+        'word.isOR=%s' %containOR(word),
         'postag=' + postag
     ]
 
