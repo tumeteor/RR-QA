@@ -74,8 +74,8 @@
       <file leaf-file-name="crf.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Baseline/crf.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="270">
-              <caret line="26" column="16" selection-start-line="26" selection-start-column="16" selection-end-line="26" selection-end-column="16" />
+            <state relative-caret-position="225">
+              <caret line="96" column="46" selection-start-line="96" selection-start-column="46" selection-end-line="96" selection-end-column="46" />
               <folding>
                 <element signature="e#0#61#0" expanded="true" />
               </folding>
@@ -976,8 +976,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Baseline/crf.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="26" column="16" selection-start-line="26" selection-start-column="16" selection-end-line="26" selection-end-column="16" />
+        <state relative-caret-position="225">
+          <caret line="96" column="46" selection-start-line="96" selection-start-column="46" selection-end-line="96" selection-end-column="46" />
           <folding>
             <element signature="e#0#61#0" expanded="true" />
           </folding>

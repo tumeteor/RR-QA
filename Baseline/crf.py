@@ -94,6 +94,7 @@ def extractPercentage(sentence):
     for match in re.finditer(rx, sentence):
         interval = match.group(0).split('-')
         for number in interval:
+            if number.count(".") > 1: continue
             if 0 <= float(number.strip('%')) <= 100:
                 numbers.append(number)
     if len(numbers) > 0:
