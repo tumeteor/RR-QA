@@ -177,3 +177,8 @@ def main():
     print(classification_report(
         truths, predictions,
         target_names=["Y", "N"]))
+
+
+
+if __name__== "__main__":
+    main()
