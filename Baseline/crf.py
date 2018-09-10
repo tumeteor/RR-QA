@@ -19,6 +19,11 @@ def word2features(doc, i):
         'word.isupper=%s' % word.isupper(),
         'word.istitle=%s' % word.istitle(),
         'word.isdigit=%s' % word.isdigit(),
+        'word.ispercent=%s' %extractPercentage(word),
+        'word.isCI=%s' %isCI(word),
+        'word.isP=%s' %containPvalue(word),
+        'word.isSigni' %containSignificance(word),
+        'word.isOR' %containOR(word),
         'postag=' + postag
     ]
 
@@ -55,6 +60,30 @@ def word2features(doc, i):
         features.append('EOS')
 
     return features
+def containPvalue(word):
+    if "p=" or "p>" or "p<" or "P=" or "P>" or "P<" in word:
+        return True
+    else:
+        return False
+
+def isCI(word):
+    if "ci" or "CI" in word:
+        return True
+    else:
+        return False
+
+def containSignificance(word):
+    if "Signi" or "signi" in word:
+        return True
+    else:
+        return False
+
+def containOR(word):
+    if "or" == word or "OR" == word or ("odd" or "Odd") in word \
+            or ("ratio" or "Ratio") in word:
+        return True
+    else:
+        return False
 
 def extractPercentage(sentence):
     import re
@@ -67,17 +96,20 @@ def extractPercentage(sentence):
         for number in interval:
             if 0 <= float(number.strip('%')) <= 100:
                 numbers.append(number)
-    return numbers
+    if len(numbers) > 0:
+        return True
+    else:
+        return False
 
 def annotate(row):
     global nlp
     id_, context, question = row[:3]
     c_doc = nlp(clean_spaces(context))
     context_tokens = [normalize_text(w.text) for w in c_doc]
-    context_tokens = [w.lower() for w in context_tokens]
+    #context_tokens = [w.lower() for w in context_tokens]
     answer  = row[-3].lower()
-    labels = ["V" if answer in w else "N" for w in context_tokens]
-    return context_tokens, labels
+    labels = ["V" if answer in w or w in answer else "N" for w in context_tokens]
+    return list(zip(context_tokens, labels))
 
 def constructData(docs):
     docs = [annotate(doc) for doc in docs]
@@ -175,7 +207,7 @@ def main():
     y_pred = [tagger.tag(xseq) for xseq in X_dev]
 
     # Create a mapping of labels to indices
-    labels = {"Y": 1, "N": 0}
+    labels = {"V": 1, "N": 0}
 
     # Convert the sequences of tags into a 1-dimensional array
     predictions = np.array([labels[tag] for row in y_pred for tag in row])
@@ -184,7 +216,7 @@ def main():
     # Print out the classification report
     print(classification_report(
         truths, predictions,
-        target_names=["Y", "N"]))
+        target_names=["V", "N"]))
 
 
 
