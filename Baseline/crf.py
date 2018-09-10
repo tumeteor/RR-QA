@@ -2,6 +2,7 @@ from prepro import flatten_json, clean_spaces, normalize_text
 import argparse
 import logging
 import nltk
+import spacy
 import numpy as np
 from sklearn.metrics import classification_report
 
@@ -74,11 +75,11 @@ def annotate(row):
     c_doc = nlp(clean_spaces(context))
     context_tokens = [normalize_text(w.text) for w in c_doc]
     context_tokens = [w.lower() for w in context_tokens]
-    answer  = row[-1][0].lower()
+    answer  = row[-3].lower()
     labels = ["V" if answer in w else "N" for w in context_tokens]
     return context_tokens, labels
 
-def constructDate(docs):
+def constructData(docs):
     docs = [annotate(doc) for doc in docs]
     data = []
     for i, doc in enumerate(docs):
@@ -90,6 +91,10 @@ def constructDate(docs):
 
         # Take the word, POS tag, and its label
         data.append([(w, pos, label) for (w, label), (word, pos) in zip(doc, tagged)])
+    return data
+
+
+nlp = None
 
 
 
@@ -121,13 +126,16 @@ def get_labels(doc):
 
 def main():
     args, log = setup()
+    """initialize spacy in each process"""
+    global nlp
+    nlp = spacy.load('en', parser=False)
 
     train = flatten_json(args.trn_file, 'train')
     dev = flatten_json(args.dev_file, 'dev')
     log.info('json data flattened.')
 
-    train_docs = [annotate(row) for row in train]
-    dev_docs = [annotate(row) for row in dev]
+    train_docs = constructData(train)
+    dev_docs = constructData(dev)
 
     X_train = [extract_features(doc) for doc in train_docs]
     y_train = [get_labels(doc) for doc in train_docs]

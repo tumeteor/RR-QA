@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c217646a-6a4b-4110-b286-8eeb78359e33" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Baseline/crf.py" afterPath="$PROJECT_DIR$/Baseline/crf.py" />
     </list>
     <ignored path="DrQA.iws" />
@@ -27,8 +26,8 @@
       <file leaf-file-name="prepro.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/prepro.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="428">
-              <caret line="222" column="27" selection-start-line="222" selection-start-column="20" selection-end-line="222" selection-end-column="27" />
+            <state relative-caret-position="-1627">
+              <caret line="88" column="8" selection-start-line="88" selection-start-column="4" selection-end-line="88" selection-end-column="8" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
               </folding>
@@ -75,8 +74,8 @@
       <file leaf-file-name="crf.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Baseline/crf.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="563">
-              <caret line="183" column="10" selection-start-line="183" selection-start-column="10" selection-end-line="183" selection-end-column="10" />
+            <state relative-caret-position="263">
+              <caret line="137" column="28" selection-start-line="137" selection-start-column="28" selection-end-line="137" selection-end-column="28" />
               <folding>
                 <element signature="e#0#61#0" expanded="true" />
               </folding>
@@ -967,8 +966,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/prepro.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="428">
-          <caret line="222" column="27" selection-start-line="222" selection-start-column="20" selection-end-line="222" selection-end-column="27" />
+        <state relative-caret-position="-1627">
+          <caret line="88" column="8" selection-start-line="88" selection-start-column="4" selection-end-line="88" selection-end-column="8" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
           </folding>
@@ -977,8 +976,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Baseline/crf.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="563">
-          <caret line="183" column="10" selection-start-line="183" selection-start-column="10" selection-end-line="183" selection-end-column="10" />
+        <state relative-caret-position="263">
+          <caret line="137" column="28" selection-start-line="137" selection-start-column="28" selection-end-line="137" selection-end-column="28" />
           <folding>
             <element signature="e#0#61#0" expanded="true" />
           </folding>
