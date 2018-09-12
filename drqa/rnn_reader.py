@@ -160,7 +160,9 @@ class RnnDocReader(nn.Module):
             # doc_hiddens_flatten = doc_hiddens.contiguous().view(doc_hiddens.numel())
             # question_hidden_flatten = question_hidden.contiguous().view(question_hidden.numel())
             
-            input_pair = torch.cat((doc_hiddens, question_hiddens), 1)
+            # input_pair = torch.cat((doc_hiddens, question_hiddens), 1)
+
+            input_pair = doc_hiddens
 
             print("input shape: {}".format(input_pair.size()))
             #input_pair = input_pair.cuda()
@@ -171,7 +173,7 @@ class RnnDocReader(nn.Module):
                                           training=self.training)
 
 
-            rank_score = self.fullyNN(input_pair)
+            rank_score = self.fullyNN(input_pair, 100)
        
 
         # Predict start and end positions

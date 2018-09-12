@@ -211,7 +211,7 @@ class BilinearSeqAttn(nn.Module):
         x_mask = batch * len
         """
         Wy = self.linear(y) if self.linear is not None else y
-        xWy = x.bmm(Wy.unsqueeze(2)).squeeze(2)
+        xWy = x.bmm(Wy.unsqueeze(2)).squeeze(2) # performs a batch matrix-matrix product
         xWy.data.masked_fill_(x_mask.data, -float('inf'))
         if self.training:
             # In training we output log-softmax for NLL
@@ -249,9 +249,15 @@ class FullyNN(nn.Module):
             torch.nn.ReLU(),
             torch.nn.Linear(100, 1),
         )
-    def forward(self, x):
+
+    def kmax_pooling(self, x, dim, k):
+        index = x.topk(k, dim=dim)[1].sort(dim=dim)[0]
+        return x.gather(dim, index)
+
+    def forward(self, x, max_input_size):
+        x = self.kmax_pooling(x, dim=1, k=max_input_size)
         x = x.view(x.size(0), -1)
-        score = F.sigmoid(self.linear(x))
+        score = self.linear(x)
         return score
 
 # ------------------------------------------------------------------------------

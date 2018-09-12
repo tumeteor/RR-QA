@@ -4,6 +4,7 @@ import logging
 import nltk
 import spacy
 import numpy as np
+import re
 from sklearn.metrics import classification_report
 
 def word2features(doc, i):
@@ -22,6 +23,7 @@ def word2features(doc, i):
         'word.ispercent=%s' %extractPercentage(word),
         'word.isCI=%s' %isCI(word),
         'word.isP=%s' %containPvalue(word),
+        'word.isP2=%s' % containPvalue2(word),
         'word.isSigni=%s' %containSignificance(word),
         'word.isOR=%s' %containOR(word),
         'postag=' + postag
@@ -66,6 +68,22 @@ def containPvalue(word):
     else:
         return False
 
+def containPvalue2(word):
+    pvalues = []
+    # look for -, a digit, a dot ending with a digit and a percentage sign
+    rx = r'[pP]\s*[=<>]\s*[-+]?\d*\.\d+|\d+'
+    # loop over the results
+    for match in re.finditer(rx, word):
+        interval = match.group(0).split('-')
+        for pvalue in interval:
+            if pvalue.startswith("p") or pvalue.startswith("P"):
+                pvalues.append(pvalue)
+    if len(pvalues) > 0:
+        return True
+    else:
+        return False
+
+
 def isCI(word):
     if "ci" or "CI" in word:
         return True
@@ -86,7 +104,6 @@ def containOR(word):
         return False
 
 def extractPercentage(sentence):
-    import re
     numbers = []
     # look for -, a digit, a dot ending with a digit and a percentage sign
     rx = r'[-\d.]+\d%'
@@ -94,9 +111,12 @@ def extractPercentage(sentence):
     for match in re.finditer(rx, sentence):
         interval = match.group(0).split('-')
         for number in interval:
-            if number.count(".") > 1: continue
-            if 0 <= float(number.strip('%')) <= 100:
-                numbers.append(number)
+            try:
+                if 0 <= float(number.strip('%')):
+                    numbers.append(number)
+            except ValueError:
+                pass
+
     if len(numbers) > 0:
         return True
     else:
