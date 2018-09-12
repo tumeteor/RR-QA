@@ -251,6 +251,10 @@ class FullyNN(nn.Module):
         )
 
     def kmax_pooling(self, x, dim, k):
+        if k > x.size()[1]:
+            # padding
+            p2d = (0, 0, k - x.size()[1], 0)
+            x = F.pad(x, p2d, 'constant', 0)
         index = x.topk(k, dim=dim)[1].sort(dim=dim)[0]
         return x.gather(dim, index)
 

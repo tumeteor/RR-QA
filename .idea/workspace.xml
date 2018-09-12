@@ -2,9 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c217646a-6a4b-4110-b286-8eeb78359e33" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Baseline/Rules.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Baseline/crf.py" afterPath="$PROJECT_DIR$/Baseline/crf.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/drqa/layers.py" afterPath="$PROJECT_DIR$/drqa/layers.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/drqa/rnn_reader.py" afterPath="$PROJECT_DIR$/drqa/rnn_reader.py" />
     </list>
@@ -54,8 +51,8 @@
       <file leaf-file-name="layers.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/drqa/layers.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="473">
-              <caret line="257" column="56" selection-start-line="257" selection-start-column="56" selection-end-line="257" selection-end-column="56" />
+            <state relative-caret-position="375">
+              <caret line="256" column="28" selection-start-line="256" selection-start-column="28" selection-end-line="256" selection-end-column="28" />
               <folding>
                 <element signature="n#!!doc" expanded="false" />
                 <element signature="e#293#305#0" expanded="true" />
@@ -68,7 +65,7 @@
                 <element signature="e#4051#4371#0" expanded="false" />
                 <element signature="e#6971#7125#1" expanded="false" />
                 <element signature="e#7398#7494#1" expanded="false" />
-                <element signature="e#9670#9726#1" expanded="false" />
+                <element signature="e#9810#9866#1" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -77,8 +74,8 @@
       <file leaf-file-name="rnn_reader.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/drqa/rnn_reader.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="401">
-              <caret line="175" column="53" selection-start-line="175" selection-start-column="53" selection-end-line="175" selection-end-column="53" />
+            <state relative-caret-position="191">
+              <caret line="98" column="47" selection-start-line="98" selection-start-column="47" selection-end-line="98" selection-end-column="47" />
               <folding>
                 <element signature="e#293#305#0" expanded="true" />
               </folding>
@@ -981,8 +978,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/drqa/layers.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="473">
-          <caret line="257" column="56" selection-start-line="257" selection-start-column="56" selection-end-line="257" selection-end-column="56" />
+        <state relative-caret-position="375">
+          <caret line="256" column="28" selection-start-line="256" selection-start-column="28" selection-end-line="256" selection-end-column="28" />
           <folding>
             <element signature="n#!!doc" expanded="false" />
             <element signature="e#293#305#0" expanded="true" />
@@ -995,15 +992,15 @@
             <element signature="e#4051#4371#0" expanded="false" />
             <element signature="e#6971#7125#1" expanded="false" />
             <element signature="e#7398#7494#1" expanded="false" />
-            <element signature="e#9670#9726#1" expanded="false" />
+            <element signature="e#9810#9866#1" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/drqa/rnn_reader.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="401">
-          <caret line="175" column="53" selection-start-line="175" selection-start-column="53" selection-end-line="175" selection-end-column="53" />
+        <state relative-caret-position="191">
+          <caret line="98" column="47" selection-start-line="98" selection-start-column="47" selection-end-line="98" selection-end-column="47" />
           <folding>
             <element signature="e#293#305#0" expanded="true" />
           </folding>
