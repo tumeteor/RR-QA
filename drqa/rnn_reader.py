@@ -96,7 +96,7 @@ class RnnDocReader(nn.Module):
             self.self_attn = layers.LinearSeqAttn(question_hidden_size)
 
         if opt['ranker']:
-            self.fullyNN = layers.FullyNN(76800)
+            self.fullyNN = layers.FullyNN(doc_hidden_size * 100)
 
         # Bilinear attention for span start/end
         self.start_attn = layers.BilinearSeqAttn(
@@ -164,7 +164,7 @@ class RnnDocReader(nn.Module):
 
             input_pair = doc_hiddens
 
-            print("input shape: {}".format(input_pair.size()))
+            # print("input shape: {}".format(input_pair.size()))
             #input_pair = input_pair.cuda()
             # Apply dropout to input
             if self.opt['dropout_nn'] > 0:
