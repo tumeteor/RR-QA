@@ -145,6 +145,8 @@ def setup():
     parser.add_argument('--max_len', type=int, default=15)
     parser.add_argument('--rnn_type', default='lstm',
                         help='supported types: rnn, gru, lstm')
+    parser.add_argument('--listmode', type=str2bool, nargs='?',
+                        const=True, default=False)
 
     args = parser.parse_args()
 
@@ -207,8 +209,8 @@ def load_data(opt):
     opt['embedding_dim'] = embedding.size(1)
     opt['pos_size'] = len(meta['vocab_tag'])
     opt['ner_size'] = len(meta['vocab_ent'])
-    BatchGen.pos_size = opt['pos_size']
-    BatchGen.ner_size = opt['ner_size']
+    BatchGenCand.pos_size = opt['pos_size']
+    BatchGenCand.ner_size = opt['ner_size']
     with open(opt['data_file'], 'rb') as f:
         data = msgpack.load(f, encoding='utf8')
     train = data['train']

@@ -72,28 +72,18 @@ class DocReaderModel(object):
         self.network.train()
 
         # Transfer to GPU
-        if self.opt['cuda']:
-            # ex (input): context_id, context_feature, context_tag, context_ent, context_mask,
-            #           question_id, question_mask, text, span
-            # IMPORTANT: batchsize must be 1 in this case
-            cand_size = len(ex[0])
-            inputs = []
-            for i in range(0, cand_size):
-                x = [Variable(e.cuda(async=True)).unsqueeze(0) for e in (ex[0][i], ex[1][i],
-                                                                         ex[2][i], ex[3][i],
-                                                                         ex[4][i])]
-                x.extend([Variable(e.cuda(async=True)) for e in (ex[5], ex[6])])
-                inputs.append(x)
+        # ex (input): context_id, context_feature, context_tag, context_ent, context_mask,
+        #           question_id, question_mask, text, span
+        # IMPORTANT: batchsize must be 1 in this case
+        cand_size = len(ex[0])
+        inputs = []
+        for i in range(0, cand_size):
+            x = [e for e in (ex[0][i], ex[1][i],ex[2][i], ex[3][i],ex[4][i])]
+            x.extend([Variable(e.cuda(async=True)) for e in (ex[5], ex[6])])
+            inputs.append(x)
 
-        else:
-            cand_size = len(ex[0])
-            inputs = []
-            for i in range(0, cand_size):
-                x = [Variable(e).unsqueeze(0) for e in (ex[0][i], ex[1][i],
-                                                        ex[2][i], ex[3][i],
-                                                        ex[4][i])]
-                x.extend([Variable(e) for e in (ex[5], ex[6])])
-                inputs.append(x)
+        inputs = np.array(inputs)
+        _input = [torch.from_numpy(e).float().to(self.device) for e in inputs.T]
 
         target_s = ex[7].to(self.device)  # start index
         target_e = ex[8].to(self.device)  # end index
@@ -107,7 +97,7 @@ class DocReaderModel(object):
         if self.opt['ranker']:
             # Run forward
 
-            score_s, score_e, y_bar_rank = self.network(*inputs)
+            score_s, score_e, y_bar_rank = self.network(*_input)
             loss_fn = torch.nn.MSELoss(size_average=False)
             # print(y_bar_rank.size())
             # print(y_rank.size())

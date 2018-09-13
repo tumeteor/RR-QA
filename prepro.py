@@ -116,10 +116,10 @@ def main():
     matched = sum(counter[t] for t in vocab)
     log.info('vocab coverage {1}/{0} | OOV occurrence {2}/{3} ({4:.4f}%)'.format(
         len(counter), len(vocab), (total - matched), total, (total - matched) / total * 100))
-    counter_tag = collections.Counter(w for row in full for w in row[3])  if list_mode \
+    counter_tag = collections.Counter(w for row in full for w in row[3])  if not list_mode \
         else collections.Counter(w for row in full for context_tag in row[3] for w in context_tag)
     vocab_tag = sorted(counter_tag, key=counter_tag.get, reverse=True)
-    counter_ent = collections.Counter(w for row in full for w in row[4])  if list_mode \
+    counter_ent = collections.Counter(w for row in full for w in row[4])  if not list_mode \
         else collections.Counter(w for row in full for context_ent in row[4] for w in context_ent)
     vocab_ent = sorted(counter_ent, key=counter_ent.get, reverse=True)
     w2id = {w: i for i, w in enumerate(vocab)}
@@ -231,7 +231,7 @@ def flatten_json(data_file, mode, list_mode=False):
                     answer_start = answers[0]['answer_start']
                     if list_mode:
                         if answer_start[-1] != -1:
-                            answer_end = answer_start + len(answer)
+                            answer_end = answer_start[-1] + len(answer)
                         else:
                             print(context)
                             answer_end = 0
