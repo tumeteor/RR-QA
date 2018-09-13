@@ -82,7 +82,9 @@ def main():
 
     # tokenize & annotate
     with Pool(args.threads, initializer=init) as p:
-        annotate_ = partial(annotate, wv_cased=args.wv_cased)
+        list_mode = True
+        annotate_ = partial(annotate_cand, wv_cased=args.wv_cased) if list_mode else \
+            partial(annotate_cand, wv_cased=args.wv_cased)
         train = list(tqdm(p.imap(annotate_, train, chunksize=args.batch_size), total=len(train), desc='train'))
         dev = list(tqdm(p.imap(annotate_, dev, chunksize=args.batch_size), total=len(dev), desc='dev  '))
     train = list(map(index_answer, train))
@@ -102,14 +104,23 @@ def main():
 
     # build vocabulary
     full = train + dev
-    vocab, counter = build_vocab([row[5] for row in full], [row[1] for row in full], wv_vocab, args.sort_all)
+
+    if list_mode:
+        vocab, counter = build_vocab([row[5] for row in full],
+                                     [context for row in full for context in row[1]], wv_vocab, args.sort_all)
+    else:
+        vocab, counter = build_vocab([row[5] for row in full], [row[1] for row in full], wv_vocab, args.sort_all)
+
+
     total = sum(counter.values())
     matched = sum(counter[t] for t in vocab)
     log.info('vocab coverage {1}/{0} | OOV occurrence {2}/{3} ({4:.4f}%)'.format(
         len(counter), len(vocab), (total - matched), total, (total - matched) / total * 100))
-    counter_tag = collections.Counter(w for row in full for w in row[3])
+    counter_tag = collections.Counter(w for row in full for w in row[3])  if list_mode \
+        else collections.Counter(w for row in full for context_tag in row[3] for w in context_tag)
     vocab_tag = sorted(counter_tag, key=counter_tag.get, reverse=True)
-    counter_ent = collections.Counter(w for row in full for w in row[4])
+    counter_ent = collections.Counter(w for row in full for w in row[4])  if list_mode \
+        else collections.Counter(w for row in full for context_ent in row[4] for w in context_ent)
     vocab_ent = sorted(counter_ent, key=counter_ent.get, reverse=True)
     w2id = {w: i for i, w in enumerate(vocab)}
     tag2id = {w: i for i, w in enumerate(vocab_tag)}
@@ -118,7 +129,8 @@ def main():
     log.info('Found {} POS tags.'.format(len(vocab_tag)))
     log.info('Found {} entity tags: {}'.format(len(vocab_ent), vocab_ent))
 
-    to_id_ = partial(to_id, w2id=w2id, tag2id=tag2id, ent2id=ent2id)
+    to_id_ = partial(to_id_cand, w2id=w2id, tag2id=tag2id, ent2id=ent2id) if list_mode \
+        else partial(to_id, w2id=w2id, tag2id=tag2id, ent2id=ent2id)
     train = list(map(to_id_, train))
     dev = list(map(to_id_, dev))
     log.info('converted to ids.')
@@ -188,7 +200,7 @@ def setup():
                              'Otherwise consider question words first.')
     parser.add_argument('--sample_size', type=int, default=0,
                         help='size of sample data (for debugging).')
-    parser.add_argument('--threads', type=int, default=min(multiprocessing.cpu_count(), 16),
+    parser.add_argument('--threads', type=int, default=min(multiprocessing.cpu_count(), 1),
                         help='number of threads for preprocessing.')
     parser.add_argument('--batch_size', type=int, default=64,
                         help='batch size for multiprocess tokenizing and tagging.')
