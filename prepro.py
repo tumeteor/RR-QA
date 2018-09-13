@@ -214,7 +214,7 @@ def setup():
 
     return args, log
 
-def flatten_json(data_file, mode):
+def flatten_json(data_file, mode, list_mode=False):
     """Flatten each article in training data."""
     with open(data_file) as f:
         data = json.load(f)['data']
@@ -229,7 +229,14 @@ def flatten_json(data_file, mode):
                 if mode == 'train':
                     answer = answers[0]['text']  # in training data there's only one answer
                     answer_start = answers[0]['answer_start']
-                    answer_end = answer_start + len(answer)
+                    if list_mode:
+                        if answer_start[-1] != -1:
+                            answer_end = answer_start + len(answer)
+                        else:
+                            print(context)
+                            answer_end = 0
+                    else:
+                        answer_end = answer_start + len(answer)
                     rows.append((id_, context, question, answer, answer_start, answer_end))
                 else:  # mode == 'dev'
                     answers = [a['text'] for a in answers]
