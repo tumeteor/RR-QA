@@ -157,7 +157,7 @@ def main():
         'embedding': embeddings.tolist(),
         'wv_cased': args.wv_cased,
     }
-    with open('HBCP/effect-all/meta.msgpack', 'wb') as f:
+    with open('HBCP/effect-listwise/meta.msgpack', 'wb') as f:
         msgpack.dump(meta, f)
     result = {
         'train': train,
@@ -167,14 +167,14 @@ def main():
     #        question_id, context, context_token_span, answer_start, answer_end
     # dev:   id, context_id, context_features, tag_id, ent_id,
     #        question_id, context, context_token_span, answer
-    with open('HBCP/effect-all/data.msgpack', 'wb') as f:
+    with open('HBCP/effect-listwise/data.msgpack', 'wb') as f:
         msgpack.dump(result, f)
     if args.sample_size:
         sample = {
             'train': train[:args.sample_size],
             'dev': dev[:args.sample_size]
         }
-        with open('HBCP/effect-all/sample.msgpack', 'wb') as f:
+        with open('HBCP/effect-listwise/sample.msgpack', 'wb') as f:
             msgpack.dump(sample, f)
     log.info('saved to disk.')
 
@@ -182,11 +182,11 @@ def setup():
     parser = argparse.ArgumentParser(
         description='Preprocessing data files, about 10 minitues to run.'
     )
-    parser.add_argument('--trn_file', default='HBCP/effect-all/train.effect.cand.json',
+    parser.add_argument('--trn_file', default='HBCP/effect-listwise/train.effect.cand.list.json',
                         help='path to train file.')
-    parser.add_argument('--dev_file', default='HBCP/effect-all/dev.effect.cand.json',
+    parser.add_argument('--dev_file', default='HBCP/effect-listwise/dev.effect.cand.list.json',
                         help='path to dev file.')
-    parser.add_argument('--test_file', default='HBCP/effect-all/dev.effect.cand.json',
+    parser.add_argument('--test_file', default='HBCP/effect-listwise/dev.effect.cand.list.json',
                         help='path to dev file.')
     parser.add_argument('--wv_file', default='glove/glove.840B.300d.txt',
                         help='path to word vector file.')
