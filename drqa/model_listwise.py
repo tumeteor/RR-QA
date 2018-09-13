@@ -79,11 +79,11 @@ class DocReaderModel(object):
         inputs = []
         for i in range(0, cand_size):
             x = [e for e in (ex[0][i], ex[1][i],ex[2][i], ex[3][i],ex[4][i])]
-            x.extend([Variable(e.cuda(async=True)) for e in (ex[5], ex[6])])
+            x.extend(e for e in (ex[5], ex[6]))
             inputs.append(x)
 
-        inputs = np.array(inputs)
-        _input = [torch.from_numpy(e).float().to(self.device) for e in inputs.T]
+
+        _input = [torch.from_numpy(inputs[:,l]).float().to(self.device) for l in range(inputs.shape[1])]
 
         target_s = ex[7].to(self.device)  # start index
         target_e = ex[8].to(self.device)  # end index

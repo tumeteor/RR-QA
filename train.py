@@ -11,7 +11,7 @@ from datetime import datetime
 from collections import Counter
 import torch
 import msgpack
-from drqa.model import DocReaderModel
+from drqa.model_listwise import DocReaderModel
 from drqa.utils import str2bool
 import numpy as np
 import six.moves.cPickle as pickle
