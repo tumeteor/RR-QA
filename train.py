@@ -40,7 +40,7 @@ def main():
         if args.reduce_lr:
             lr_decay(model.optimizer, lr_decay=args.reduce_lr)
             log.info('[learning rate reduced by {}]'.format(args.reduce_lr))
-        batches = BatchGen(dev, batch_size=args.batch_size, evaluation=True, gpu=args.cuda)
+        batches = BatchGenCand(dev, batch_size=args.batch_size, evaluation=True, gpu=args.cuda)
         em, f1 = infer(batches=batches, model=model, log=log, candidateMode=True, dev_y=dev_y)
         log.info("[dev EM: {} F1: {}]".format(em, f1))
         if math.fabs(em - checkpoint['em']) > 1e-3 or math.fabs(f1 - checkpoint['f1']) > 1e-3:
@@ -57,7 +57,7 @@ def main():
     for epoch in range(epoch_0, epoch_0 + args.epochs):
         log.warning('Epoch {}'.format(epoch))
         # train
-        batches = BatchGen(train, batch_size=args.batch_size, gpu=args.cuda)
+        batches = BatchGenCand(train, batch_size=args.batch_size, gpu=args.cuda)
         start = datetime.now()
         for i, batch in enumerate(batches):
             model.update(batch)
@@ -67,7 +67,7 @@ def main():
                     str((datetime.now() - start) / (i + 1) * (len(batches) - i - 1)).split('.')[0]))
         log.debug('\n')
         # eval
-        batches = BatchGen(dev, batch_size=args.batch_size, evaluation=True, gpu=args.cuda)
+        batches = BatchGenCand(dev, batch_size=args.batch_size, evaluation=True, gpu=args.cuda)
 
         em, f1 = infer(batches=batches, model=model, log=log, candidateMode=True, dev_y=dev_y)
         # save
