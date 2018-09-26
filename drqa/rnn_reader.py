@@ -15,7 +15,7 @@ from . import layers
 
 
 class RnnDocReader(nn.Module):
-    """Network for the Document Reader module of DrQA."""
+    """Network for the Document Reader module of CQA."""
     RNN_TYPES = {'lstm': nn.LSTM, 'gru': nn.GRU, 'rnn': nn.RNN}
 
     def __init__(self, opt, padding_idx=0, embedding=None):

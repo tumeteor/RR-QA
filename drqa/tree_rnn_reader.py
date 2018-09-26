@@ -40,7 +40,7 @@ class ContextEncoding(nn.Module):
 
 
 class RnnDocReader(nn.Module):
-    """Network for the Document Reader module of DrQA."""
+    """Network for the Document Reader module of CQA."""
 
     def __init__(self, opt, padding_idx=0, embedding=None):
         super(RnnDocReader, self).__init__()
