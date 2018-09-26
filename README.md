@@ -1,4 +1,4 @@
-DrQA
+CQA
 ---
 A pytorch implementation of the ACL 2017 paper [Reading Wikipedia to Answer Open-Domain Questions](http://www-cs.stanford.edu/people/danqi/papers/acl2017.pdf) (DrQA).
 
