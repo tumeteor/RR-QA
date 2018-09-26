@@ -1,5 +1,3 @@
-# Attention!!!!! prepro_each only return the first paragraph of the first article for debugging, you can modify the `prepro_each` function according to corresponding comment.
-
 from tqdm import tqdm
 import json
 import os

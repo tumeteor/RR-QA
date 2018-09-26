@@ -20,6 +20,7 @@ from .rnn_reader import RnnDocReader
 #   - save all random seeds
 #   - change the dimension of inputs (for POS and NER features)
 #   - remove "reset parameters" and use a gradient hook for gradient masking
+
 # Origin: https://github.com/facebookresearch/ParlAI/tree/master/parlai/agents/drqa
 
 logger = logging.getLogger(__name__)

@@ -11,6 +11,7 @@ from TreeQA.FullTree import BinaryTreeLSTM, BinaryTreeTopDownLSTM
 # Modification:
 #   - add 'pos' and 'ner' features.
 #   - use gradient hook (instead of tensor copying) for gradient masking
+#   - adapting to tree-LSTM
 # Origin: https://github.com/facebookresearch/ParlAI/tree/master/parlai/agents/drqa
 class QuestionEncoding(nn.Module):
 
@@ -34,8 +35,6 @@ class ContextEncoding(nn.Module):
         bp_states, bp_hidden = self.bp_lstm(tree, embs)
         td_states, td_hidden = self.td_lstm(tree, embs)
         return torch.cat([bp_hidden, td_hidden])
-
-
 
 
 

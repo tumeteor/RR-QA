@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="c217646a-6a4b-4110-b286-8eeb78359e33" name="Default" comment="">
-      <change type="MOVED" beforePath="$USER_HOME$/Work/QA-ibm/CQA/DrQA/.idea/DrQA.iml" afterPath="$USER_HOME$/Work/QA-ibm/CQA/DrQA/.idea/CQA.iml" />
-      <change type="MODIFICATION" beforePath="$USER_HOME$/Work/QA-ibm/CQA/DrQA/.idea/modules.xml" afterPath="$USER_HOME$/Work/QA-ibm/CQA/DrQA/.idea/modules.xml" />
-      <change type="MODIFICATION" beforePath="$USER_HOME$/Work/QA-ibm/CQA/DrQA/.idea/workspace.xml" afterPath="$USER_HOME$/Work/QA-ibm/CQA/DrQA/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$USER_HOME$/Work/QA-ibm/CQA/DrQA/Baseline/Rules.py" afterPath="$USER_HOME$/Work/QA-ibm/CQA/DrQA/Baseline/Rules.py" />
-    </list>
+    <list default="true" id="c217646a-6a4b-4110-b286-8eeb78359e33" name="Default" comment="" />
     <ignored path="DrQA.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path=".idea/dataSources.local.xml" />
@@ -26,97 +21,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="model.py" pinned="false" current-in-tab="false">
-        <entry file="file://$USER_HOME$/Work/QA-ibm/CQA/CQA/drqa/model.py">
+      <file leaf-file-name="prepro.py" pinned="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/Work/QA-ibm/CQA/CQA/prepro.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1886">
-              <caret line="175" column="14" selection-start-line="175" selection-start-column="14" selection-end-line="175" selection-end-column="14" />
-              <folding>
-                <element signature="e#293#306#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="crf.py" pinned="false" current-in-tab="false">
-        <entry file="file://$USER_HOME$/Work/QA-ibm/CQA/CQA/Baseline/crf.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="5145">
-              <caret line="343" column="3" selection-start-line="343" selection-start-column="3" selection-end-line="343" selection-end-column="3" />
-              <folding>
-                <element signature="e#0#61#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="model_listwise.py" pinned="false" current-in-tab="true">
-        <entry file="file://$USER_HOME$/Work/QA-ibm/CQA/CQA/drqa/model_listwise.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1297">
-              <caret line="38" column="22" selection-start-line="38" selection-start-column="22" selection-end-line="38" selection-end-column="22" />
-              <folding>
-                <element signature="e#293#306#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="layers.py" pinned="false" current-in-tab="false">
-        <entry file="file://$USER_HOME$/Work/QA-ibm/CQA/CQA/drqa/layers.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="377">
-              <caret line="216" column="55" selection-start-line="216" selection-start-column="55" selection-end-line="216" selection-end-column="55" />
-              <folding>
-                <element signature="n#!!doc" expanded="false" />
-                <element signature="e#293#305#0" expanded="true" />
-                <element signature="e#1238#1466#0" expanded="false" />
-                <element signature="e#1510#1628#1" expanded="false" />
-                <element signature="e#3935#4426#0" expanded="false" />
-                <element signature="e#4051#4371#0" expanded="false" />
-                <element signature="e#9881#9937#1" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="FullTree.py" pinned="false" current-in-tab="false">
-        <entry file="file://$USER_HOME$/Work/QA-ibm/CQA/CQA/TreeQA/FullTree.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1815">
-              <caret line="124" column="25" selection-start-line="124" selection-start-column="20" selection-end-line="124" selection-end-column="25" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Tree.py" pinned="false" current-in-tab="false">
-        <entry file="file://$USER_HOME$/Work/QA-ibm/CQA/CQA/TreeQA/Tree.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="45">
-              <caret line="3" column="13" selection-start-line="3" selection-start-column="13" selection-end-line="3" selection-end-column="13" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Rules.py" pinned="false" current-in-tab="false">
-        <entry file="file://$USER_HOME$/Work/QA-ibm/CQA/CQA/Baseline/Rules.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-67">
-              <caret line="68" column="24" selection-start-line="68" selection-start-column="24" selection-end-line="68" selection-end-column="24" />
-              <folding>
-                <element signature="e#16#25#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="train.py" pinned="false" current-in-tab="false">
-        <entry file="file://$USER_HOME$/Work/QA-ibm/CQA/CQA/train.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1153">
-              <caret line="136" column="35" selection-start-line="136" selection-start-column="35" selection-end-line="136" selection-end-column="35" />
+            <state relative-caret-position="4125">
+              <caret line="275" column="18" selection-start-line="275" selection-start-column="4" selection-end-line="275" selection-end-column="18" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
               </folding>
@@ -124,8 +33,8 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="requirements.txt" pinned="false" current-in-tab="false">
-        <entry file="file://$USER_HOME$/Work/QA-ibm/CQA/CQA/requirements.txt">
+      <file leaf-file-name="prepro-sst.py" pinned="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/Work/QA-ibm/CQA/CQA/prepro-sst.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="0">
               <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -134,10 +43,90 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="model.py" pinned="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/Work/QA-ibm/CQA/CQA/drqa/model.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="330">
+              <caret line="22" column="0" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
+              <folding>
+                <element signature="e#293#306#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="model_listwise.py" pinned="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/Work/QA-ibm/CQA/CQA/drqa/model_listwise.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="255">
+              <caret line="22" column="36" selection-start-line="22" selection-start-column="36" selection-end-line="22" selection-end-column="36" />
+              <folding>
+                <element signature="e#293#306#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="tree_rnn_reader.py" pinned="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/Work/QA-ibm/CQA/CQA/drqa/tree_rnn_reader.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="585">
+              <caret line="39" column="0" selection-start-line="39" selection-start-column="0" selection-end-line="39" selection-end-column="0" />
+              <folding>
+                <element signature="e#293#305#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="utils.py" pinned="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/Work/QA-ibm/CQA/CQA/drqa/utils.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="15">
+              <caret line="1" column="0" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="interact.py" pinned="false" current-in-tab="true">
+        <entry file="file://$USER_HOME$/Work/QA-ibm/CQA/CQA/interact.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="23">
+              <caret line="108" column="23" selection-start-line="108" selection-start-column="23" selection-end-line="108" selection-end-column="23" />
+              <folding>
+                <element signature="e#0#18#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="FullTree.py" pinned="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/Work/QA-ibm/CQA/CQA/TreeQA/FullTree.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-2317">
+              <caret line="124" column="25" selection-start-line="124" selection-start-column="20" selection-end-line="124" selection-end-column="25" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="train.py" pinned="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/Work/QA-ibm/CQA/CQA/train.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-5527">
+              <caret line="149" column="0" selection-start-line="149" selection-start-column="0" selection-end-line="149" selection-end-column="0" />
+              <folding>
+                <element signature="e#0#9#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="treenode.py" pinned="false" current-in-tab="false">
         <entry file="file://$USER_HOME$/Work/QA-ibm/CQA/CQA/treenode.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="590">
+            <state relative-caret-position="233">
               <caret line="100" column="19" selection-start-line="100" selection-start-column="13" selection-end-line="100" selection-end-column="19" />
               <folding />
             </state>
@@ -173,6 +162,13 @@
         <option value="$USER_HOME$/Work/QA-ibm/CQA/DrQA/drqa/layers.py" />
         <option value="$USER_HOME$/Work/QA-ibm/CQA/DrQA/Baseline/crf.py" />
         <option value="$USER_HOME$/Work/QA-ibm/CQA/DrQA/drqa/model_listwise.py" />
+        <option value="$USER_HOME$/Work/QA-ibm/CQA/CQA/interact.py" />
+        <option value="$USER_HOME$/Work/QA-ibm/CQA/CQA/drqa/utils.py" />
+        <option value="$USER_HOME$/Work/QA-ibm/CQA/CQA/drqa/model.py" />
+        <option value="$USER_HOME$/Work/QA-ibm/CQA/CQA/drqa/layers.py" />
+        <option value="$USER_HOME$/Work/QA-ibm/CQA/CQA/drqa/model_listwise.py" />
+        <option value="$USER_HOME$/Work/QA-ibm/CQA/CQA/drqa/tree_rnn_reader.py" />
+        <option value="$USER_HOME$/Work/QA-ibm/CQA/CQA/prepro-sst.py" />
       </list>
     </option>
   </component>
@@ -503,7 +499,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1280" height="740" extended-state="0" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2956381" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -592,7 +588,7 @@
         <state relative-caret-position="225">
           <caret line="18" column="44" selection-start-line="18" selection-start-column="23" selection-end-line="18" selection-end-column="44" />
           <folding>
-            <element signature="e#293#305#0" expanded="false" />
+            <element signature="e#293#305#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -671,7 +667,7 @@
         <state relative-caret-position="225">
           <caret line="18" column="44" selection-start-line="18" selection-start-column="23" selection-end-line="18" selection-end-column="44" />
           <folding>
-            <element signature="e#293#305#0" expanded="false" />
+            <element signature="e#293#305#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -750,7 +746,7 @@
         <state relative-caret-position="2235">
           <caret line="152" column="6" selection-start-line="152" selection-start-column="6" selection-end-line="152" selection-end-column="6" />
           <folding>
-            <element signature="e#293#305#0" expanded="false" />
+            <element signature="e#293#305#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -809,23 +805,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/Work/QA-ibm/CQA/CQA/drqa/utils.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Work/QA-ibm/CQA/CQA/drqa/tree_rnn_reader.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="18" column="44" selection-start-line="18" selection-start-column="23" selection-end-line="18" selection-end-column="44" />
-          <folding>
-            <element signature="e#293#305#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/Work/QA-ibm/CQA/CQA/download.sh">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -849,34 +828,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/Work/QA-ibm/CQA/CQA/drqa/rnn_reader.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="386">
-          <caret line="179" column="20" selection-start-line="179" selection-start-column="8" selection-end-line="179" selection-end-column="20" />
-          <folding>
-            <element signature="e#293#305#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Work/QA-ibm/CQA/CQA/interact.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="47" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Work/QA-ibm/CQA/CQA/prepro.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-727">
-          <caret line="275" column="18" selection-start-line="275" selection-start-column="4" selection-end-line="275" selection-end-column="18" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/Work/QA-ibm/CQA/CQA/README.md">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -885,37 +836,29 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/Work/QA-ibm/CQA/CQA/prepro-sst.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="165" column="36" selection-start-line="165" selection-start-column="36" selection-end-line="165" selection-end-column="36" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Work/QA-ibm/CQA/CQA/treenode.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="590">
-          <caret line="100" column="19" selection-start-line="100" selection-start-column="13" selection-end-line="100" selection-end-column="19" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Work/QA-ibm/CQA/CQA/train.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1153">
-          <caret line="136" column="35" selection-start-line="136" selection-start-column="35" selection-end-line="136" selection-end-column="35" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/Work/QA-ibm/CQA/CQA/requirements.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Work/QA-ibm/CQA/CQA/TreeQA/Tree.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="45">
+          <caret line="3" column="13" selection-start-line="3" selection-start-column="13" selection-end-line="3" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Work/QA-ibm/CQA/CQA/drqa/rnn_reader.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="13" column="16" selection-start-line="13" selection-start-column="16" selection-end-line="13" selection-end-column="16" />
+          <folding>
+            <element signature="e#293#305#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -931,7 +874,7 @@
     </entry>
     <entry file="file://$USER_HOME$/Work/QA-ibm/CQA/CQA/Baseline/crf.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5145">
+        <state relative-caret-position="4568">
           <caret line="343" column="3" selection-start-line="343" selection-start-column="3" selection-end-line="343" selection-end-column="3" />
           <folding>
             <element signature="e#0#61#0" expanded="true" />
@@ -939,54 +882,109 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/Work/QA-ibm/CQA/CQA/TreeQA/Tree.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="3" column="13" selection-start-line="3" selection-start-column="13" selection-end-line="3" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Work/QA-ibm/CQA/CQA/TreeQA/FullTree.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1815">
-          <caret line="124" column="25" selection-start-line="124" selection-start-column="20" selection-end-line="124" selection-end-column="25" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/Work/QA-ibm/CQA/CQA/drqa/layers.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="377">
-          <caret line="216" column="55" selection-start-line="216" selection-start-column="55" selection-end-line="216" selection-end-column="55" />
+        <state relative-caret-position="165">
+          <caret line="11" column="37" selection-start-line="11" selection-start-column="37" selection-end-line="11" selection-end-column="37" />
           <folding>
-            <element signature="n#!!doc" expanded="false" />
             <element signature="e#293#305#0" expanded="true" />
-            <element signature="e#1238#1466#0" expanded="false" />
-            <element signature="e#1510#1628#1" expanded="false" />
-            <element signature="e#3935#4426#0" expanded="false" />
-            <element signature="e#4051#4371#0" expanded="false" />
-            <element signature="e#9881#9937#1" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Work/QA-ibm/CQA/CQA/drqa/model.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1886">
-          <caret line="175" column="14" selection-start-line="175" selection-start-column="14" selection-end-line="175" selection-end-column="14" />
-          <folding>
-            <element signature="e#293#306#0" expanded="true" />
+            <element signature="e#1275#1503#0" expanded="false" />
+            <element signature="e#1547#1665#1" expanded="false" />
+            <element signature="e#3972#4463#0" expanded="false" />
+            <element signature="e#4088#4408#0" expanded="false" />
+            <element signature="e#9918#9974#1" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$USER_HOME$/Work/QA-ibm/CQA/CQA/drqa/model_listwise.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1297">
-          <caret line="38" column="22" selection-start-line="38" selection-start-column="22" selection-end-line="38" selection-end-column="22" />
+        <state relative-caret-position="255">
+          <caret line="22" column="36" selection-start-line="22" selection-start-column="36" selection-end-line="22" selection-end-column="36" />
           <folding>
             <element signature="e#293#306#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Work/QA-ibm/CQA/CQA/train.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-5527">
+          <caret line="149" column="0" selection-start-line="149" selection-start-column="0" selection-end-line="149" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Work/QA-ibm/CQA/CQA/treenode.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="233">
+          <caret line="100" column="19" selection-start-line="100" selection-start-column="13" selection-end-line="100" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Work/QA-ibm/CQA/CQA/drqa/model.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="330">
+          <caret line="22" column="0" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
+          <folding>
+            <element signature="e#293#306#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Work/QA-ibm/CQA/CQA/drqa/tree_rnn_reader.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="585">
+          <caret line="39" column="0" selection-start-line="39" selection-start-column="0" selection-end-line="39" selection-end-column="0" />
+          <folding>
+            <element signature="e#293#305#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Work/QA-ibm/CQA/CQA/drqa/utils.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="1" column="0" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Work/QA-ibm/CQA/CQA/TreeQA/FullTree.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2317">
+          <caret line="124" column="25" selection-start-line="124" selection-start-column="20" selection-end-line="124" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Work/QA-ibm/CQA/CQA/prepro-sst.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Work/QA-ibm/CQA/CQA/prepro.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4125">
+          <caret line="275" column="18" selection-start-line="275" selection-start-column="4" selection-end-line="275" selection-end-column="18" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Work/QA-ibm/CQA/CQA/interact.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="23">
+          <caret line="108" column="23" selection-start-line="108" selection-start-column="23" selection-end-line="108" selection-end-column="23" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
           </folding>
         </state>
       </provider>

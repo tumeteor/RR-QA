@@ -8,7 +8,8 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torch.autograd import Variable
 
-# No modification is made to this file.
+# Add layer for the ranking components
+# Add additional attention mechanisms
 # Origin: https://github.com/facebookresearch/ParlAI/tree/master/parlai/agents/drqa
 
 # ------------------------------------------------------------------------------

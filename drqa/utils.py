@@ -1,6 +1,5 @@
 import argparse
 
-
 class AverageMeter(object):
     """Keep exponential weighted averages."""
     def __init__(self, beta=0.99):
