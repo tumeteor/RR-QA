@@ -76,15 +76,15 @@ def prepare_test_cand(vocab, vocab_tag, vocab_ent, wv_cased, args):
 def main():
     args, log = setup()
 
-    train = flatten_json(args.trn_file, 'train')
-    dev = flatten_json(args.dev_file, 'dev')
+    train = flatten_json(args.trn_file, 'train', list_mode=False)
+    dev = flatten_json(args.dev_file, 'dev', list_mode=False)
     log.info('json data flattened.')
 
     # tokenize & annotate
     with Pool(args.threads, initializer=init) as p:
-        list_mode = True
+        list_mode = False
         annotate_ = partial(annotate_cand, wv_cased=args.wv_cased) if list_mode else \
-            partial(annotate_cand, wv_cased=args.wv_cased)
+            partial(annotate, wv_cased=args.wv_cased)
         train = list(tqdm(p.imap(annotate_, train, chunksize=args.batch_size), total=len(train), desc='train'))
         dev = list(tqdm(p.imap(annotate_, dev, chunksize=args.batch_size), total=len(dev), desc='dev  '))
     train = list(map(index_answer, train))
@@ -157,7 +157,7 @@ def main():
         'embedding': embeddings.tolist(),
         'wv_cased': args.wv_cased,
     }
-    with open('HBCP/effect-listwise/meta.msgpack', 'wb') as f:
+    with open('HBCP/effect-all/meta.msgpack', 'wb') as f:
         msgpack.dump(meta, f)
     result = {
         'train': train,
@@ -167,14 +167,14 @@ def main():
     #        question_id, context, context_token_span, answer_start, answer_end
     # dev:   id, context_id, context_features, tag_id, ent_id,
     #        question_id, context, context_token_span, answer
-    with open('HBCP/effect-listwise/data.msgpack', 'wb') as f:
+    with open('HBCP/effect-all/data.msgpack', 'wb') as f:
         msgpack.dump(result, f)
     if args.sample_size:
         sample = {
             'train': train[:args.sample_size],
             'dev': dev[:args.sample_size]
         }
-        with open('HBCP/effect-listwise/sample.msgpack', 'wb') as f:
+        with open('HBCP/effect-all/meta.msgpack', 'wb') as f:
             msgpack.dump(sample, f)
     log.info('saved to disk.')
 
@@ -182,11 +182,11 @@ def setup():
     parser = argparse.ArgumentParser(
         description='Preprocessing data files, about 10 minitues to run.'
     )
-    parser.add_argument('--trn_file', default='HBCP/effect-listwise/train.effect.cand.list.json',
+    parser.add_argument('--trn_file', default='HBCP/effect-all/train.effect.cand.json',
                         help='path to train file.')
-    parser.add_argument('--dev_file', default='HBCP/effect-listwise/dev.effect.cand.list.json',
+    parser.add_argument('--dev_file', default='HBCP/effect-all/dev.effect.cand.json',
                         help='path to dev file.')
-    parser.add_argument('--test_file', default='HBCP/effect-listwise/dev.effect.cand.list.json',
+    parser.add_argument('--test_file', default='HBCP/effect-all/dev.effect.cand.json',
                         help='path to dev file.')
     parser.add_argument('--wv_file', default='glove/glove.840B.300d.txt',
                         help='path to word vector file.')
@@ -200,7 +200,7 @@ def setup():
                              'Otherwise consider question words first.')
     parser.add_argument('--sample_size', type=int, default=0,
                         help='size of sample data (for debugging).')
-    parser.add_argument('--threads', type=int, default=min(multiprocessing.cpu_count(), 1),
+    parser.add_argument('--threads', type=int, default=min(multiprocessing.cpu_count(), 16),
                         help='number of threads for preprocessing.')
     parser.add_argument('--batch_size', type=int, default=64,
                         help='batch size for multiprocess tokenizing and tagging.')

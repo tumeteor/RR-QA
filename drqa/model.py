@@ -99,7 +99,7 @@ class DocReaderModel(object):
             # Run forward
             score_s, score_e = self.network(*inputs)
             # Compute loss and accuracies
-            loss = F.nll_loss(score_s, target_s) + F.nll_loss(score_e, target_e)
+            loss = F.nll_loss(score_s, target_s, ignore_index=-1) + F.nll_loss(score_e, target_e, ignore_index=-1)
 
         
         self.train_loss.update(loss.item())
@@ -117,6 +117,29 @@ class DocReaderModel(object):
         self.optimizer.step()
         self.updates += 1
 
+    def save(self, filename, epoch, scores):
+        em, f1, best_eval = scores
+        params = {
+            'state_dict': {
+                'network': self.network.state_dict(),
+                'optimizer': self.optimizer.state_dict(),
+                'updates': self.updates,
+                'loss': self.train_loss.state_dict()
+            },
+            'config': self.opt,
+            'epoch': epoch,
+            'em': em,
+            'f1': f1,
+            'best_eval': best_eval,
+            'random_state': random.getstate(),
+            'torch_state': torch.random.get_rng_state(),
+            'torch_cuda_state': torch.cuda.get_rng_state()
+        }
+        try:
+            torch.save(params, filename)
+            logger.info('model saved to {}'.format(filename))
+        except BaseException:
+            logger.warning('[ WARN: Saving failed... continuing anyway. ]')
     def predict(self, ex):
         # Eval mode
         self.network.eval()
@@ -163,3 +186,5 @@ class DocReaderModel(object):
                 pscores.append(np.max(scores))
 
         return (predictions, pscores)
+
+ 

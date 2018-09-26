@@ -247,7 +247,8 @@ class FullyNN(nn.Module):
         self.linear = torch.nn.Sequential(
             torch.nn.Linear(input_size, 100),
             torch.nn.ReLU(),
-            torch.nn.Linear(100, 1),
+            torch.nn.Dropout(0.4),
+            torch.nn.Linear(100, 1)
         )
 
     def kmax_pooling(self, x, dim, k):
@@ -261,8 +262,9 @@ class FullyNN(nn.Module):
     def forward(self, x, max_input_size):
         x = self.kmax_pooling(x, dim=1, k=max_input_size)
         x = x.view(x.size(0), -1)
-        score = self.linear(x)
-        return score
+        scores = self.linear(x)
+        #alpha = F.sigmoid(scores)
+        return scores
 
 # ------------------------------------------------------------------------------
 # Functional

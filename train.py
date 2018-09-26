@@ -11,7 +11,7 @@ from datetime import datetime
 from collections import Counter
 import torch
 import msgpack
-from drqa.model_listwise import DocReaderModel
+from drqa.model import DocReaderModel
 from drqa.utils import str2bool
 import numpy as np
 import six.moves.cPickle as pickle
@@ -40,7 +40,7 @@ def main():
         if args.reduce_lr:
             lr_decay(model.optimizer, lr_decay=args.reduce_lr)
             log.info('[learning rate reduced by {}]'.format(args.reduce_lr))
-        batches = BatchGenCand(dev, batch_size=args.batch_size, evaluation=True, gpu=args.cuda)
+        batches = BatchGen(dev, batch_size=args.batch_size, evaluation=True, gpu=args.cuda)
         em, f1 = infer(batches=batches, model=model, log=log, candidateMode=True, dev_y=dev_y)
         log.info("[dev EM: {} F1: {}]".format(em, f1))
         if math.fabs(em - checkpoint['em']) > 1e-3 or math.fabs(f1 - checkpoint['f1']) > 1e-3:
@@ -57,7 +57,7 @@ def main():
     for epoch in range(epoch_0, epoch_0 + args.epochs):
         log.warning('Epoch {}'.format(epoch))
         # train
-        batches = BatchGenCand(train, batch_size=args.batch_size, gpu=args.cuda)
+        batches = BatchGen(train, batch_size=args.batch_size, gpu=args.cuda)
         start = datetime.now()
         for i, batch in enumerate(batches):
             model.update(batch)
@@ -67,7 +67,7 @@ def main():
                     str((datetime.now() - start) / (i + 1) * (len(batches) - i - 1)).split('.')[0]))
         log.debug('\n')
         # eval
-        batches = BatchGenCand(dev, batch_size=args.batch_size, evaluation=True, gpu=args.cuda)
+        batches = BatchGen(dev, batch_size=args.batch_size, evaluation=True, gpu=args.cuda)
 
         em, f1 = infer(batches=batches, model=model, log=log, candidateMode=True, dev_y=dev_y)
         # save
@@ -89,9 +89,9 @@ def setup():
     # system
     parser.add_argument('--log_per_updates', type=int, default=3,
                         help='log model loss per x updates (mini-batches).')
-    parser.add_argument('--data_file', default='HBCP/effect-listwise/data.msgpack',
+    parser.add_argument('--data_file', default='HBCP/effect-all/data.msgpack',
                         help='path to preprocessed data file.')
-    parser.add_argument('--model_dir', default='models/HBCP/effect-listwise',
+    parser.add_argument('--model_dir', default='models/HBCP/effect-all/norank',
                         help='path to store saved models.')
     parser.add_argument('--save_last_only', action='store_true',
                         help='only save the final models.')
@@ -200,17 +200,17 @@ def lr_decay(optimizer, lr_decay):
 
 
 def load_data(opt):
-    with open('HBCP/effect-listwise/meta.msgpack', 'rb') as f:
+    with open('HBCP/effect-all/meta.msgpack', 'rb') as f:
         meta = msgpack.load(f, encoding='utf8')
     embedding = torch.Tensor(meta['embedding'])
-    opt['ranker'] = True # for ranker component
+    opt['ranker'] = False # for ranker component
     opt['pretrained_words'] = True
     opt['vocab_size'] = embedding.size(0)
     opt['embedding_dim'] = embedding.size(1)
     opt['pos_size'] = len(meta['vocab_tag'])
     opt['ner_size'] = len(meta['vocab_ent'])
-    BatchGenCand.pos_size = opt['pos_size']
-    BatchGenCand.ner_size = opt['ner_size']
+    BatchGen.pos_size = opt['pos_size']
+    BatchGen.ner_size = opt['ner_size']
     with open(opt['data_file'], 'rb') as f:
         data = msgpack.load(f, encoding='utf8')
     train = data['train']
@@ -232,7 +232,7 @@ def infer(batches, model, log, candidateMode=True, dev_y=None):
             scores.extend(s)
             log.debug('> evaluating [{}/{}]'.format(i, len(batches)))
 
-        with open("HBCP/effect-all/dev.effect.dict.pkl", "rb") as f:
+        with open("HBCP/effect/test.effect.dict.pkl", "rb") as f:
             cqDict = pickle.load(f)
         cDict = {}
         for i in range(0, len(predictions)):
@@ -243,7 +243,7 @@ def infer(batches, model, log, candidateMode=True, dev_y=None):
                 cDict[qid] = [i]
 
         actualPreds, actualAns, actualScores = rankScore(cDict, predictions=predictions, scores=scores)
-        em, f1 = score(actualAns, actualPreds)
+        em, f1 = score(actualAns, actualPreds, evaluation=True)
         log.warning("dev EM: {} F1: {}".format(em, f1))
 
     else:
@@ -252,7 +252,7 @@ def infer(batches, model, log, candidateMode=True, dev_y=None):
             predictions.extend(p)
             log.debug('> evaluating [{}/{}]'.format(i, len(batches)))
 
-        em, f1 = score(predictions, dev_y)
+        em, f1 = score(predictions, dev_y, evaluation=True)
         log.warning("dev EM: {} F1: {}".format(em, f1))
 
     return em, f1
@@ -468,7 +468,10 @@ def _normalize_answer(s):
     return white_space_fix(remove_articles(remove_punc(lower(s))))
 
 
-def _exact_match(pred, answers):
+def _exact_match(pred, answers, null_mode=False):
+    if null_mode:
+       if pred == "null" or answers[0] == "null":
+          return False
     if pred is None or answers is None:
         return False
     pred = _normalize_answer(pred)
@@ -499,20 +502,26 @@ def _f1_score(pred, answers):
 
 def score(pred, truth, evaluation=False):
     assert len(pred) == len(truth)
-    f1 = em = total = 0
+    f1 = em = emr = total = totalr = 0
+   
     for p, t in zip(pred, truth):
-        #print(p + " " + t)
-        total += 1
-        em += _exact_match(p, t)
+        #if p != "null": print(p + " " + t[0])
+        if t[0] != "null": total += 1
+        if p.strip() != "null": totalr += 1
+        #em += _exact_match(p, t)
+        em += _exact_match(p, t, True)
         f1 += _f1_score(p, t)
     print("number of EM: {}".format(em))
+    print("number of predicted values: {}".format(total))
+    print("total number: {}".format(totalr))
     pre = 100. * em / total
     f1 = 100. * f1 / total
     if evaluation:
       print("precision: {}".format(pre))
-      recall = 100. * em / 87
+      recall = 100. * em / totalr if totalr != 0 else 0
       print("recall: {}".format(recall))
-      print("f1: {}".format((2 * pre * recall) / (pre + recall)))
+      if (pre + recall) > 0:
+        print("f1: {}".format((2 * pre * recall) / (pre + recall)))
     return pre, f1
 
 

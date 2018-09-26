@@ -94,7 +94,7 @@ class RnnDocReader(nn.Module):
             raise NotImplementedError('question_merge = %s' % opt['question_merge'])
         if opt['question_merge'] == 'self_attn':
             self.self_attn = layers.LinearSeqAttn(question_hidden_size)
-
+        
         if opt['ranker']:
             self.fullyNN = layers.FullyNN(doc_hidden_size * 100)
 
@@ -168,7 +168,7 @@ class RnnDocReader(nn.Module):
             #input_pair = input_pair.cuda()
             # Apply dropout to input
             if self.opt['dropout_nn'] > 0:
-                input_pair = F.dropout(input_pair.data,
+                 input_pair = F.dropout(input_pair.data,
                                           p=self.opt['dropout_nn'],
                                           training=self.training)
 

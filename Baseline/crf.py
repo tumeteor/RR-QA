@@ -5,8 +5,11 @@ import nltk
 import spacy
 import numpy as np
 import re
+import six.moves.cPickle as pickle
+import pycrfsuite
 from sklearn.metrics import classification_report
-
+from train import score as TScore
+import random
 def word2features(doc, i):
     word = doc[i][0]
     postag = doc[i][1]
@@ -122,18 +125,26 @@ def extractPercentage(sentence):
     else:
         return False
 
-def annotate(row):
+def annotate(row, mode="train"):
     global nlp
-    id_, context, question = row[:3]
-    c_doc = nlp(clean_spaces(context))
-    context_tokens = [normalize_text(w.text) for w in c_doc]
+    id_, context, question = row[:3] 
+    #c_doc = nlp(clean_spaces(context))
+    #context_tokens = [normalize_text(w.text) for w in c_doc]
+    context_tokens = context.split()
     #context_tokens = [w.lower() for w in context_tokens]
-    answer  = row[-3].lower()
-    labels = ["V" if answer in w or w in answer else "N" for w in context_tokens]
+    answer = row[-3] if mode == "train" else row[-1][0] 
+    if mode != "train": print("answer: {}".format(answer))
+    #print(context_tokens)
+    for w in context_tokens:
+      if answer in w:
+        print("word: {}".format(w))
+        print(answer)
+    labels = ["V" if answer[0] in w else "N" for w in context_tokens]
+    #print(labels)
     return list(zip(context_tokens, labels))
 
-def constructData(docs):
-    docs = [annotate(doc) for doc in docs]
+def constructData(docs, mode="train"):
+    docs = [annotate(doc, mode) for doc in docs]
     data = []
     for i, doc in enumerate(docs):
         # Obtain the list of tokens in the document
@@ -149,7 +160,8 @@ def constructData(docs):
 
 nlp = None
 
-
+def cleanNonNumeric(text):
+    return re.sub('[^0-9\.]','', text)
 
 def setup():
     parser = argparse.ArgumentParser(
@@ -158,6 +170,8 @@ def setup():
     parser.add_argument('--trn_file', default='HBCP/effect-all/train.effect.cand.json',
                         help='path to train file.')
     parser.add_argument('--dev_file', default='HBCP/effect-all/dev.effect.cand.json',
+                        help='path to dev file.')
+    parser.add_argument('--test_file', default='HBCP/effect-all/test_top1.effect.cand.json',
                         help='path to dev file.')
     args = parser.parse_args()
 
@@ -177,7 +191,7 @@ def extract_features(doc):
 def get_labels(doc):
     return [label for (token, postag, label) in doc]
 
-def main():
+def train():
     args, log = setup()
     """initialize spacy in each process"""
     global nlp
@@ -188,7 +202,7 @@ def main():
     log.info('json data flattened.')
 
     train_docs = constructData(train)
-    dev_docs = constructData(dev)
+    dev_docs = constructData(dev, mode="dev")
 
     X_train = [extract_features(doc) for doc in train_docs]
     y_train = [get_labels(doc) for doc in train_docs]
@@ -196,7 +210,6 @@ def main():
     X_dev = [extract_features(doc) for doc in dev_docs]
     y_dev = [get_labels(doc) for doc in dev_docs]
 
-    import pycrfsuite
     trainer = pycrfsuite.Trainer(verbose=True)
 
     # Submit training data to the trainer
@@ -237,9 +250,103 @@ def main():
     # Print out the classification report
     print(classification_report(
         truths, predictions,
-        target_names=["V", "N"]))
+        target_names=["N", "V"]))
+
+
+
+
+def inference():
+    args, log = setup()
+    """initialize spacy in each process"""
+    global nlp
+    nlp = spacy.load('en', parser=False)
+
+    test = flatten_json(args.test_file, 'test')
+    log.info('json data flattened.')
+
+    test_docs = constructData(test, mode='test')
+
+    X_test = [extract_features(doc) for doc in test_docs]
+    y_test = [get_labels(doc) for doc in test_docs]
+    
+    tagger = pycrfsuite.Tagger()
+    tagger.open('crf.model')
+    predictions = []
+    scores = []
+    ins = 0
+    #test = np.array(test)
+    for xseq in X_test:
+        y_pred = tagger.tag(xseq)
+        y_prob = tagger.probability(y_pred)
+        context = test[ins][1]
+        #test_doc = nlp(clean_spaces(context))
+        #test_context_tokens = [normalize_text(w.text) for w in test_doc]
+        test_context_tokens = context.split()
+        assert(len(test_context_tokens) == len(y_pred))
+        ins += 1
+        indices = [i for i, y in enumerate(y_pred) if y == 'V']
+        #print(indices)
+        if len(indices) == 0:
+          score = 0
+          pred = "null"
+        else:
+          score = y_prob
+          # if tagged more than 1, pick randomly (only for outcome)
+          # TODO: maybe choose based on confidence score
+          pred = random.choice([test_context_tokens[i] for i in indices])
+          # pred = ' '.join(str(test_context_tokens[i]) for i in indices)
+        scores.append(score)
+        predictions.append(pred)
+
+    with open("HBCP/effect-all/test_top1.effect.dict.pkl", "rb") as f:
+        cqDict = pickle.load(f)
+    print(len(predictions))
+    print(len(cqDict))
+    assert len(predictions) == len(cqDict)
+    
+    cDict = {}
+    for i in range(0, len(predictions)):
+        qid = cqDict[i]
+        if qid in cDict:
+            cDict[qid].append(i)
+        else:
+            cDict[qid] = [i]
+    actualPredictions = []
+    actualAns = []
+    actualScores = []
+    
+
+    for qid in cDict:
+        # group by att + docid
+        # and get the prediction with max score
+        cList = np.array(cDict[qid])
+        pScores = [scores[idx] for idx in cList]
+        # bestIdx = cList[pScores.index(max(pScores))]
+        # fixed! get relative indices from pScores -> get actual from cList
+        bestIdx = [cList[idx] for idx in np.array(pScores).argsort()[-1:][::-1]]
+        bestP = [predictions[idx] for idx in bestIdx]
+        bestS = [scores[idx] for idx in bestIdx]
+        ans = qid.split("\t")[-1]
+
+        # make a HARD threshold for
+        # filtering (no presence) attributes
+        # only for whole pipeline evaluation
+        # if (bestS[0] < 0.4): bestP = ["null"]
+        actualPredictions.append(bestP)
+        actualAns.append(ans)
+        actualScores.append(bestS)
+    
+    for i in range(0,10):
+       print(actualPredictions[i])
+       print(actualAns[i])
+    #em, f1 = TScore([a.strip() for a in actualAns], [a[0].strip() for a in actualPredictions], evaluation=True)
+    em, f1 = TScore(actualAns, actualPredictions, evaluation=True)
+    print("dev EM: {} F1: {}".format(em, f1))
+
+
 
 
 
 if __name__== "__main__":
-    main()
+    inference()
+    #train()

@@ -78,12 +78,16 @@ class DocReaderModel(object):
         cand_size = len(ex[0])
         inputs = []
         for i in range(0, cand_size):
-            x = [e for e in (ex[0][i], ex[1][i],ex[2][i], ex[3][i],ex[4][i])]
-            x.extend(e for e in (ex[5], ex[6]))
+            x = [e.to(self.device) for e in (ex[0][i], ex[1][i],ex[2][i], ex[3][i],ex[4][i])]
+            x.extend(e.to(self.device) for e in (ex[5], ex[6]))
             inputs.append(x)
+       
+        for col in zip(*inputs):
+           for e in col:
+             print(e.size())
+           print("AAA")
 
-
-        _input = [torch.from_numpy(inputs[:,l]).float().to(self.device) for l in range(inputs.shape[1])]
+        _input = [torch.stack(col) for col in zip(*inputs)]
 
         target_s = ex[7].to(self.device)  # start index
         target_e = ex[8].to(self.device)  # end index

@@ -20,7 +20,7 @@ To change this script to batch model, simply modify line 70 from "BatchGen([mode
 parser = argparse.ArgumentParser(
     description='Interact with document reader model.'
 )
-parser.add_argument('--model-file', default='models/HBCP/effect-all/best_model.pt',
+parser.add_argument('--model-file', default='models/HBCP/outcome-all/best_model.pt',
                     help='path to model file')
 parser.add_argument("--cuda", type=str2bool, nargs='?',
                     const=True, default=torch.cuda.is_available(),
@@ -51,6 +51,7 @@ args = parser.parse_args()
 
 
 if args.cuda:
+    print('using cuda')
     checkpoint = torch.load(args.model_file)
 else:
     checkpoint = torch.load(args.model_file, map_location=lambda storage, loc: storage)
@@ -117,6 +118,10 @@ if (args.batch):
             bestP = [predictions[idx] for idx in bestIdx]
             bestS = [scores[idx] for idx in bestIdx]
             ans = qid.split("\t")[-1]
+            # make a HARD threshold for
+            # filtering (no presence) attributes
+            # only for whole pipeline evaluation
+            # if (bestS[0] < 0.6): bestP = ["null"]
             actualPredictions.append(bestP)
             actualAns.append(ans)
             actualScores.append(bestS)
