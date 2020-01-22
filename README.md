@@ -23,7 +23,7 @@ value extraction component. Thus, the
 answer selection mechanism can as well
 take into account the cross-passage clues.
 
-
+![Ranker-Reader model](RR_pipeline)
 
 
 
