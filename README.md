@@ -23,7 +23,9 @@ value extraction component. Thus, the
 answer selection mechanism can as well
 take into account the cross-passage clues.
 
-![Ranker-Reader model](RR_pipeline)
+![Ranker-Reader model](RR_pipeline.png)
+
+The code-base is refactored and extended from the DrQA implementation.
 
 
 
