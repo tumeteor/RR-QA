@@ -1,8 +1,29 @@
 CQA
 ---
-A pytorch implementation of the ACL 2017 paper [Reading Wikipedia to Answer Open-Domain Questions](http://www-cs.stanford.edu/people/danqi/papers/acl2017.pdf) (DrQA).
+Value extraction based on some interested
+attributes from text collection is an crucial
+task in clinical domain. Previous work
+often consider the task in a closed-world
+context, assuming a single relevant passage
+is given or in a restricted scope (e.g.,
+value extraction from summary records).
+However, for clinical scientific papers, relevant
+passages are often unknown and retrieving
+them is not at all a trivial task.
+Thus, selecting the right value (that involves
+many similar candidates) from the
+open scope is very challenging. To address
+this problem, we propose an end-toend
+neural model that enables those answer
+candidates from different passages
+to compete with each other in a ranking
+manner. Specifically, we jointly train
+the passage ranking with our passage-level
+value extraction component. Thus, the
+answer selection mechanism can as well
+take into account the cross-passage clues.
 
-Reading comprehension is a task to produce an answer when given a question and one or more pieces of evidence (usually natural language paragraphs). Compared to question answering over knowledge bases, reading comprehension models are more flexible and have revealed a great potential for zero-shot learning.
+
 
 
 
