@@ -1,7 +1,9 @@
 # coding: utf-8
 import re
 import random
-def extractPvalue(sentence):
+
+
+def extract_pvalue(sentence):
     pvalues = []
     rx = r'[pP]\s*[=<>]\s*[-+]?\d*\.\d+|\d+'
     # loop over the results
@@ -12,14 +14,15 @@ def extractPvalue(sentence):
                 pvalues.append(pvalue)
     return pvalues
 
-def extractCI(sentence):
+
+def extract_ci(sentence):
     cis = []
     rx = r'(?<=95% ci|95% CI)\s*.[(|[]?[\d+\.\d+]+\s?[-|–]?\s?[\d+\.\d+]+[]|)]?'
     # loop over the results
     for m in re.finditer(rx, sentence):
         match = m.group(0)
         print(match)
-        match = match.replace("[","")
+        match = match.replace("[", "")
         match = match.replace("]", "")
         match = match.replace("(", "")
         match = match.replace(")", "")
@@ -27,10 +30,11 @@ def extractCI(sentence):
         cis.append(match)
     return cis
 
-def extractUpperCI(sentence):
+
+def extract_upper_ci(sentence):
     uppers = []
     lowers = []
-    cis = extractCI(sentence)
+    cis = extract_ci(sentence)
 
     for ci in cis:
         try:
@@ -48,7 +52,8 @@ def extractUpperCI(sentence):
 
     return lowers, uppers
 
-def extractOR(sentence):
+
+def extract_or(sentence):
     cis = []
     rx = r'(OR|Odd ratio| odd ratio | Odd Ratio | Odds ratio)'
     # loop over the results
@@ -57,49 +62,51 @@ def extractOR(sentence):
         for ci in interval:
             cis.append(ci)
     return cis
+
+
 random.seed(1013)
 with open("effect.out", "r") as f:
     em = 0
     total = 0
     uniq = 0
     for line in f:
-      parts = line.split("\t")
-      if not parts[0].startswith("content"):
-          gt = parts[0]
-          qid = parts[1]
-          if len(candidate_snt) == 0:
-              total += 1
-              continue
-          else:
-              # extract candidate answers
-              if qid == "3870686":
-                  candidate_ans = extractOR(candidate_snt)
-              elif qid == "3870696":
-                  candidate_ans = extractPvalue(candidate_snt)
-              elif qid == "3870697":
-                  candidate_ans = extractUpperCI(candidate_snt)[0]
-              elif qid == "3870702":
-                  candidate_ans = extractUpperCI(candidate_snt)[1]
-              else:
-                  total += 1
-                  continue
-              if len(candidate_ans) == 0:
-                  total += 1
-                  continue
+        parts = line.split("\t")
+        if not parts[0].startswith("content"):
+            gt = parts[0]
+            qid = parts[1]
+            if len(candidate_snt) == 0:
+                total += 1
+                continue
+            else:
+                # extract candidate answers
+                if qid == "3870686":
+                    candidate_ans = extract_or(candidate_snt)
+                elif qid == "3870696":
+                    candidate_ans = extract_pvalue(candidate_snt)
+                elif qid == "3870697":
+                    candidate_ans = extract_upper_ci(candidate_snt)[0]
+                elif qid == "3870702":
+                    candidate_ans = extract_upper_ci(candidate_snt)[1]
+                else:
+                    total += 1
+                    continue
+                if len(candidate_ans) == 0:
+                    total += 1
+                    continue
 
-              p = candidate_ans[0]
-              # p = random.choice(candidates)
-              if (p == gt): em += 1
-              total += 1
-      else:
-          candidate_snt = parts[1]
-          # if len(candidates) == 0:
-          #     print(line)
-          #     total += 1
-          #     continue
+                p = candidate_ans[0]
+                # p = random.choice(candidates)
+                if (p == gt): em += 1
+                total += 1
+        else:
+            candidate_snt = parts[1]
+            # if len(candidates) == 0:
+            #     print(line)
+            #     total += 1
+            #     continue
 
     print("total: {}".format(total))
-    prec = 100. * em /total
+    prec = 100. * em / total
     recall = 100. * em / 98
     print("number of unique candidates: {}".format(uniq))
     print("precision: {}".format(prec))

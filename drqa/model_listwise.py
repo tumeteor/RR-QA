@@ -82,11 +82,7 @@ class DocReaderModel(object):
             x = [e.to(self.device) for e in (ex[0][i], ex[1][i],ex[2][i], ex[3][i],ex[4][i])]
             x.extend(e.to(self.device) for e in (ex[5], ex[6]))
             inputs.append(x)
-       
-        for col in zip(*inputs):
-           for e in col:
-             print(e.size())
-           print("AAA")
+
 
         _input = [torch.stack(col) for col in zip(*inputs)]
 

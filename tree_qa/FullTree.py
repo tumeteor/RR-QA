@@ -3,6 +3,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torch.autograd import Variable
 
+
 class BinaryTreeLeafModule(nn.Module):
 
     def __init__(self, in_dim, mem_dim):
@@ -18,6 +19,7 @@ class BinaryTreeLeafModule(nn.Module):
         o = F.sigmoid(self.ox(input))
         h = o * F.tanh(c)
         return c, h
+
 
 class BinaryTreeComposer(nn.Module):
 
@@ -36,14 +38,15 @@ class BinaryTreeComposer(nn.Module):
         self.rflh, self.rfrh = new_gate()
         self.ulh, self.urh = new_gate()
 
-    def forward(self, lc, lh , rc, rh):
+    def forward(self, lc, lh, rc, rh):
         i = F.sigmoid(self.ilh(lh) + self.irh(rh))
         lf = F.sigmoid(self.lflh(lh) + self.lfrh(rh))
         rf = F.sigmoid(self.rflh(lh) + self.rfrh(rh))
         update = F.tanh(self.ulh(lh) + self.urh(rh))
-        c =  i* update + lf*lc + rf*rc
+        c = i * update + lf * lc + rf * rc
         h = F.tanh(c)
         return c, h
+
 
 class BinaryTreeTopDownComposer(nn.Module):
 
@@ -65,13 +68,13 @@ class BinaryTreeTopDownComposer(nn.Module):
         i = F.sigmoid(self.ilh(ph))
         pf = F.sigmoid(self.lflh(ph))
         update = F.tanh(self.ulh(ph))
-        c =  i* update + pf*pc
+        c = i * update + pf * pc
         h = F.tanh(c)
         return c, h
 
 
 class BinaryTreeTopDownLSTM(nn.Module):
-    def __init__(self, in_dim, mem_dim, criterion,bp_lstm):
+    def __init__(self, in_dim, mem_dim, criterion, bp_lstm):
         super(BinaryTreeTopDownLSTM, self).__init__()
         self.in_dim = in_dim
         self.mem_dim = mem_dim
@@ -102,7 +105,7 @@ class BinaryTreeTopDownLSTM(nn.Module):
         params = F.torch.cat(one_dim)
         return params
 
-    def forward(self, tree, embs, training = False):
+    def forward(self, tree, embs, training=False):
         # add singleton dimension for future call to node_forward
         # embs = F.torch.unsqueeze(self.emb(inputs),1)
 
@@ -110,9 +113,9 @@ class BinaryTreeTopDownLSTM(nn.Module):
             # leaf case
             # input: embedding + h(p) + c(p)
             pc, ph = self.get_parent_state(tree)
-            tree.state = torch.cat((self.leaf_module.forward(embs[tree.idx-1]),
+            tree.state = torch.cat((self.leaf_module.forward(embs[tree.idx - 1]),
                                     self.leaf_module.forward(ph),
-                                    self.leaf_module.forward(pc)),1)
+                                    self.leaf_module.forward(pc)), 1)
         elif tree.parent is None:
             # root case
             tree.state = self.bp_lstm.root_c, self.bp_lstm.root_h
@@ -123,7 +126,6 @@ class BinaryTreeTopDownLSTM(nn.Module):
             tree.state = self.composer.forward(pc, ph)
 
         return tree.state
-
 
     def get_parent_state(self, tree):
         if tree.parent is None:
@@ -146,7 +148,7 @@ class BinaryTreeLSTM(nn.Module):
         self.mem_dim = mem_dim
         self.criterion = criterion
 
-        self.leaf_module = BinaryTreeLeafModule(cuda,in_dim, mem_dim)
+        self.leaf_module = BinaryTreeLeafModule(cuda, in_dim, mem_dim)
         self.composer = BinaryTreeComposer(cuda, in_dim, mem_dim)
         self.output_module = None
         self.root_c = None
@@ -172,13 +174,13 @@ class BinaryTreeLSTM(nn.Module):
         params = F.torch.cat(one_dim)
         return params
 
-    def forward(self, tree, embs, training = False):
+    def forward(self, tree, embs, training=False):
         # add singleton dimension for future call to node_forward
         # embs = F.torch.unsqueeze(self.emb(inputs),1)
 
         if tree.num_children == 0:
             # leaf case
-            tree.state = self.leaf_module.forward(embs[tree.idx-1])
+            tree.state = self.leaf_module.forward(embs[tree.idx - 1])
         else:
             for idx in range(tree.num_children):
                 _ = self.forward(tree.children[idx], embs, training)
@@ -190,12 +192,10 @@ class BinaryTreeLSTM(nn.Module):
 
         return tree.state
 
-
     def get_child_state(self, tree):
         lc, lh = tree.children[0].state
         rc, rh = tree.children[1].state
         return lc, lh, rc, rh
-
 
 
 class ChildSumTreeLSTM(nn.Module):
