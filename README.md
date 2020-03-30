@@ -28,6 +28,21 @@ take into account the cross-passage clues.
 The code-base is refactored and extended from the DrQA implementation.
 
 
+### Requirements
+- python >= 3.5
+- numpy
+- pytorch 0.4
+- msgpack
+- spacy 1.x
+
+### Dataset
+The model can work with the SQuAD dataset, but it is mainly tailored to our custom clinical domain dataset.
+We will publicize (a part of) the dataset later.
+
+
+
+
+
 
 
 
